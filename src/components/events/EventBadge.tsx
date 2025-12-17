@@ -6,36 +6,71 @@ interface EventBadgeProps {
 }
 
 export const EventBadge: React.FC<EventBadgeProps> = ({ event }) => {
-  const getEventColor = () => {
+  const getTypeConfig = () => {
     switch (event.type) {
       case "movie":
-        return "bg-purple-100 text-purple-800";
+        return {
+          bg: "bg-purple-500/15",
+          border: "border-purple-500/40",
+          text: "text-purple-100",
+          chipBg: "bg-purple-500/80",
+          chipText: "text-white",
+          label: "Movie"
+        };
       case "function":
-        return "bg-green-100 text-green-800";
+        return {
+          bg: "bg-emerald-500/15",
+          border: "border-emerald-500/40",
+          text: "text-emerald-50",
+          chipBg: "bg-emerald-500/80",
+          chipText: "text-white",
+          label: "Function"
+        };
       case "movie-anniversary":
-        return "bg-amber-100 text-amber-800";
+        return {
+          bg: "bg-amber-500/15",
+          border: "border-amber-500/40",
+          text: "text-amber-50",
+          chipBg: "bg-amber-500/80",
+          chipText: "text-white",
+          label: "Anniversary"
+        };
       case "event":
       default:
-        return "bg-blue-100 text-blue-800";
+        return {
+          bg: "bg-sky-500/15",
+          border: "border-sky-500/40",
+          text: "text-sky-50",
+          chipBg: "bg-sky-500/80",
+          chipText: "text-white",
+          label: "Event"
+        };
     }
   };
 
-  const getLabel = () => {
+  const cfg = getTypeConfig();
+
+  const getDisplayTitle = () => {
     if (event.type === "movie-anniversary" && event.meta?.anniversaryYears) {
       const baseTitle = event.title.replace(/^\d+\s+years?\s+of\s+/i, "");
-      return `${event.meta.anniversaryYears} year${
+      return `${event.meta.anniversaryYears} yr${
         event.meta.anniversaryYears > 1 ? "s" : ""
-      } of ${baseTitle}`;
+      } • ${baseTitle}`;
     }
     return event.title;
   };
 
   return (
     <div
-      className={`text-xs px-2 py-1 rounded truncate ${getEventColor()}`}
+      className={`flex items-center gap-1 rounded-md border px-2 py-1 text-[11px] ${cfg.bg} ${cfg.border} ${cfg.text}`}
       title={event.title}
     >
-      {getLabel()}
+      <span
+        className={`inline-flex items-center rounded-full px-2 py-[1px] text-[10px] font-semibold ${cfg.chipBg} ${cfg.chipText}`}
+      >
+        {cfg.label}
+      </span>
+      <span className="truncate">{getDisplayTitle()}</span>
     </div>
   );
 };

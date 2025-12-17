@@ -9,10 +9,22 @@ export const months = monthsJson as MonthMeta[];
 export const eventTypes = eventTypesJson as EventTypeMeta[];
 
 /**
- * Build all calendar items for a given year
- * (static events/functions + movie anniversaries).
+ * Build all calendar items for a given year:
+ * - Static events/functions whose date year === year
+ * - Movie anniversaries generated for that year
  */
 export const getCalendarItemsForYear = (year: number): CalendarItem[] => {
+  const eventsForYear = events.filter((item) => {
+    const itemYear = Number(item.date.split("-")[0]);
+    return itemYear === year;
+  });
+
+  const functionsForYear = functionsData.filter((item) => {
+    const itemYear = Number(item.date.split("-")[0]);
+    return itemYear === year;
+  });
+
   const anniversaries = getMovieAnniversariesForYear(movies, year);
-  return [...events, ...functionsData, ...anniversaries];
+
+  return [...eventsForYear, ...functionsForYear, ...anniversaries];
 };

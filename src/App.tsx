@@ -1,42 +1,94 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { LandingPage } from "./pages/LandingPage";
 import { CalendarHomePage } from "./pages/CalendarHomePage";
 import { MonthlyViewPage } from "./pages/MonthlyViewPage";
+import { CurrentMonthPage } from "./pages/CurrentMonthPage";
+import { months } from "./data";
 
-type View = "landing" | "calendar-home" | "month";
+type View =
+  | "landing"
+  | "current-month"
+  | "calendar-home"
+  | "calendar-home-month"
+  | "monthly";
+
+function getCurrentYearMonth() {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = now.getMonth() + 1; // 1-12
+  return { year, month };
+}
 
 function App() {
-  const [view, setView] = useState<View>("landing");
-  const [selectedMonth, setSelectedMonth] = useState<number | null>(null);
+  const [{ year: currentYear, month: currentMonth }] = useState(
+    getCurrentYearMonth
+  );
 
-  // Change this to 2025 to see anniversaries like "4 years of The Last Adventure"
-  const [year] = useState<number>(2026);
+  const [calendarYear] = useState<number>(2026);
+  const [view, setView] = useState<View>("landing");
+  const [selectedMonth, setSelectedMonth] = useState<number>(currentMonth);
+
+  const monthMeta = useMemo(
+    () => months.find((m) => m.id === selectedMonth),
+    [selectedMonth]
+  );
+  void monthMeta; // avoid unused warning, used implicitly by pages
 
   if (view === "landing") {
     return (
-      <LandingPage onExplore={() => setView("calendar-home")} />
+      <LandingPage
+        onGoCurrentMonth={() => setView("current-month")}
+        onGoViewCalendar={() => setView("calendar-home")}
+        onGoMonthly={() => setView("monthly")}
+      />
+    );
+  }
+
+  if (view === "current-month") {
+    return (
+      <CurrentMonthPage
+        year={currentYear}
+        monthId={currentMonth}
+        onBack={() => setView("landing")}
+      />
     );
   }
 
   if (view === "calendar-home") {
     return (
       <CalendarHomePage
-        year={year}
+        year={calendarYear}
         onBack={() => setView("landing")}
         onSelectMonth={(monthId) => {
           setSelectedMonth(monthId);
-          setView("month");
+          setView("calendar-home-month");
         }}
       />
     );
   }
 
-  if (view === "month" && selectedMonth != null) {
+  if (view === "calendar-home-month") {
     return (
       <MonthlyViewPage
-        year={year}
+        year={calendarYear}
         monthId={selectedMonth}
-        onBack={() => setView("calendar-home")}
+        mode="calendar-home"
+        onBackToSelection={() => setView("calendar-home")}
+        onBackToLanding={() => setView("landing")}
+        onMonthChange={(newMonthId) => setSelectedMonth(newMonthId)}
+      />
+    );
+  }
+
+  if (view === "monthly") {
+    return (
+      <MonthlyViewPage
+        year={calendarYear}
+        monthId={selectedMonth}
+        mode="monthly"
+        onBackToSelection={undefined}
+        onBackToLanding={() => setView("landing")}
+        onMonthChange={(newMonthId) => setSelectedMonth(newMonthId)}
       />
     );
   }

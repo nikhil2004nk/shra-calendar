@@ -6,7 +6,7 @@ interface DayCellProps {
   day: number;
   dateKey: string;
   events: Event[];
-  onClick?: () => void;
+  onClick?: (events: Event[]) => void;
 }
 
 export const DayCell: React.FC<DayCellProps> = ({
@@ -16,31 +16,39 @@ export const DayCell: React.FC<DayCellProps> = ({
 }) => {
   const hasEvents = events.length > 0;
 
+  const handleClick = () => {
+    if (!hasEvents || !onClick) return;
+    onClick(events);
+  };
+
   return (
     <button
       type="button"
-      onClick={onClick}
-      className={`h-20 rounded-lg border px-1 py-1 text-left transition ${
+      onClick={handleClick}
+      className={`flex h-28 flex-col rounded-xl border px-2 py-1.5 text-left text-xs transition ${
         hasEvents
-          ? "border-pink-500/70 bg-pink-500/10 hover:bg-pink-500/20"
-          : "border-slate-800 bg-slate-900 hover:bg-slate-800/80"
+          ? "border-pink-500/60 bg-slate-900/90 hover:bg-slate-900"
+          : "border-slate-800 bg-slate-950 hover:bg-slate-900/80"
       }`}
     >
-      <div className="flex items-center justify-between text-xs text-slate-300">
-        <span>{day}</span>
+      <div className="mb-1 flex items-center justify-between">
+        <span className="text-[11px] font-semibold text-slate-200">
+          {day}
+        </span>
         {hasEvents && (
-          <span className="text-[10px] font-semibold text-pink-400">
-            {events.length} event{events.length > 1 ? "s" : ""}
+          <span className="rounded-full bg-pink-500/20 px-2 py-[1px] text-[10px] font-semibold text-pink-300">
+            {events.length} {events.length === 1 ? "event" : "events"}
           </span>
         )}
       </div>
-      <div className="mt-1 space-y-0.5">
+
+      <div className="flex-1 space-y-1 overflow-hidden">
         {events.slice(0, 2).map((event) => (
           <EventBadge key={event.id} event={event} />
         ))}
         {events.length > 2 && (
           <div className="text-[10px] text-slate-400">
-            +{events.length - 2} more
+            +{events.length - 2} more…
           </div>
         )}
       </div>

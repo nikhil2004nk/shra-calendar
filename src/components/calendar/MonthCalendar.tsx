@@ -45,7 +45,7 @@ export const MonthCalendar: React.FC<MonthCalendarProps> = ({
       </div>
       <div className="grid grid-cols-7 gap-1 text-sm">
         {weeks.flat().map((day, idx) => {
-          if (!day) return <div key={idx} className="h-16" />;
+          if (!day) return <div key={idx} className="h-28" />;
 
           const dateKey = buildDateKey(year, month, day);
           const eventsForDay = eventsByDate[dateKey] ?? [];
@@ -56,7 +56,7 @@ export const MonthCalendar: React.FC<MonthCalendarProps> = ({
               day={day}
               dateKey={dateKey}
               events={eventsForDay}
-              onClick={() => onDayClick?.(dateKey, eventsForDay)}
+              onClick={(events) => onDayClick?.(dateKey, events)}
             />
           );
         })}

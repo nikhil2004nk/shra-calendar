@@ -23,18 +23,19 @@ export const getMovieAnniversariesForYear = (
     const yearsDiff = targetYear - releaseYear;
     const date = buildDateKey(targetYear, month, day);
 
-    result.push({
-      id: `${movie.id}-anniv-${targetYear}`,
-      title: `${yearsDiff} years of ${movie.title}`,
-      date,
-      month,
-      type: "movie-anniversary",
-      description: `Celebrating ${yearsDiff} years since the release of "${movie.title}".`,
-      meta: {
-        baseMovieId: movie.id,
-        anniversaryYears: yearsDiff
-      }
-    });
+   result.push({
+  id: `${movie.id}-anniv-${targetYear}`,
+  title: `${yearsDiff} years of ${movie.title}`,
+  date,
+  month,
+  type: "movie-anniversary",
+  description: `Celebrating ${yearsDiff} years since the release of "${movie.title}".`,
+  meta: {
+    baseMovieId: movie.id,
+    anniversaryYears: yearsDiff
+  }
+});
+
   }
 
   return result;
