@@ -1,33 +1,38 @@
-export interface Event {
+export type CalendarItemType =
+  | "movie"
+  | "event"
+  | "function"
+  | "movie-anniversary";
+
+export interface BaseMovie {
   id: string;
   title: string;
-  date: string; // ISO date string
-  type: string;
-  description?: string;
+  date: string; // original release date YYYY-MM-DD
+  type: "movie";
+  description: string;
   imageUrl?: string;
-  location?: string;
+  director?: string;
+  cast?: string[];
+  duration?: number;
   isMovie?: boolean;
-  isFunction?: boolean;
 }
 
-export interface MovieEvent extends Event {
-  isMovie: true;
-  director: string;
-  cast: string[];
-  duration: number; // in minutes
+export interface CalendarItem {
+  id: string;
+  title: string;
+  date: string; // YYYY-MM-DD for that year
+  month: number; // 1-12
+  type: CalendarItemType;
+  description: string;
+  meta?: {
+    baseMovieId?: string;
+    anniversaryYears?: number;
+  };
 }
 
-export interface FunctionEvent extends Event {
-  isFunction: true;
-  organizer: string;
-  attendees: string[];
-}
-
-export type EventType = 'movie' | 'function' | 'other';
-
-export interface MonthData {
-  id: number;
-  name: string;
-  shortName: string;
-  days: number;
-}
+export type Event = CalendarItem;
+export type MovieEvent = CalendarItem & { type: "movie" };
+export type FunctionEvent = CalendarItem & { type: "function" };
+export type MovieAnniversaryEvent = CalendarItem & {
+  type: "movie-anniversary";
+};

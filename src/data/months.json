@@ -1,14 +1,14 @@
 [
-  { "id": 0, "name": "January", "shortName": "Jan", "days": 31 },
-  { "id": 1, "name": "February", "shortName": "Feb", "days": 28 },
-  { "id": 2, "name": "March", "shortName": "Mar", "days": 31 },
-  { "id": 3, "name": "April", "shortName": "Apr", "days": 30 },
-  { "id": 4, "name": "May", "shortName": "May", "days": 31 },
-  { "id": 5, "name": "June", "shortName": "Jun", "days": 30 },
-  { "id": 6, "name": "July", "shortName": "Jul", "days": 31 },
-  { "id": 7, "name": "August", "shortName": "Aug", "days": 31 },
-  { "id": 8, "name": "September", "shortName": "Sep", "days": 30 },
-  { "id": 9, "name": "October", "shortName": "Oct", "days": 31 },
-  { "id": 10, "name": "November", "shortName": "Nov", "days": 30 },
-  { "id": 11, "name": "December", "shortName": "Dec", "days": 31 }
+  { "id": 1, "name": "January", "shortName": "Jan", "days": 31, "firstWeekday": 4 },
+  { "id": 2, "name": "February", "shortName": "Feb", "days": 28, "firstWeekday": 7 },
+  { "id": 3, "name": "March", "shortName": "Mar", "days": 31, "firstWeekday": 7 },
+  { "id": 4, "name": "April", "shortName": "Apr", "days": 30, "firstWeekday": 3 },
+  { "id": 5, "name": "May", "shortName": "May", "days": 31, "firstWeekday": 5 },
+  { "id": 6, "name": "June", "shortName": "Jun", "days": 30, "firstWeekday": 1 },
+  { "id": 7, "name": "July", "shortName": "Jul", "days": 31, "firstWeekday": 3 },
+  { "id": 8, "name": "August", "shortName": "Aug", "days": 31, "firstWeekday": 6 },
+  { "id": 9, "name": "September", "shortName": "Sep", "days": 30, "firstWeekday": 2 },
+  { "id": 10, "name": "October", "shortName": "Oct", "days": 31, "firstWeekday": 4 },
+  { "id": 11, "name": "November", "shortName": "Nov", "days": 30, "firstWeekday": 7 },
+  { "id": 12, "name": "December", "shortName": "Dec", "days": 31, "firstWeekday": 2 }
 ]

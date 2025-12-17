@@ -1,97 +1,70 @@
-// src/pages/CalendarHomePage.tsx
-import { useState } from 'react';
-import Header from '../components/layout/Header';
-import PageContainer from '../components/layout/PageContainer';
-import { MonthCalendar } from '../components/calendar/MonthCalendar';
-import { EventList } from '../components/events/EventList';
-import { EventDetailsModal } from '../components/events/EventDetailsModal';
-import { GlobalSearchBar } from '../components/search/GlobalSearchBar';
-import { useSearch } from '../hooks/useSearch';
-import { allEvents, getEventsByMonth, type Event } from '../data';
+import React, { useMemo } from "react";
+import { getCalendarItemsForYear, months } from "../data";
+import { useSearch } from "../hooks/useSearch";
+import { GlobalSearchBar } from "../components/search/GlobalSearchBar";
+import { EventList } from "../components/events/EventList";
 
-export const CalendarHomePage = () => {
-  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
-  const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
+interface CalendarHomePageProps {
+  onBack: () => void;
+  onSelectMonth: (monthId: number) => void;
+  year: number;
+}
 
-  const {
-    searchResults,
-    searchEvents,
-    clearSearch,
-  } = useSearch(allEvents);
-
-  const handleEventClick = (event: Event) => {
-    setSelectedEvent(event);
-  };
-
-  const handleSearch = (query: string) => {
-    searchEvents(query);
-  };
-
-  const handleClearSearch = () => {
-    clearSearch();
-  };
-
-  // Get events for the selected month
-  const eventsForSelectedMonth = getEventsByMonth(
-    selectedDate.getFullYear(),
-    selectedDate.getMonth()
+export const CalendarHomePage: React.FC<CalendarHomePageProps> = ({
+  onBack,
+  onSelectMonth,
+  year
+}) => {
+  const allItems = useMemo(
+    () => getCalendarItemsForYear(year),
+    [year]
   );
 
-  // Get events for the selected date
-  const eventsForSelectedDate = allEvents.filter(event => {
-    const eventDate = new Date(event.date);
-    return (
-      eventDate.getFullYear() === selectedDate.getFullYear() &&
-      eventDate.getMonth() === selectedDate.getMonth() &&
-      eventDate.getDate() === selectedDate.getDate()
-    );
-  });
+  const { query, setQuery, results } = useSearch(allItems);
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <Header />
-      <PageContainer className="py-6">
-        <div className="mb-6">
-          <GlobalSearchBar
-            onSearch={handleSearch}
-            onClear={handleClearSearch}
-            results={searchResults}
-            onResultClick={handleEventClick}
-          />
-        </div>
+    <main className="min-h-screen bg-slate-950 text-slate-50 px-4 py-6">
+      <button
+        onClick={onBack}
+        className="text-xs text-slate-400 hover:text-slate-200 mb-4"
+      >
+        ← Back
+      </button>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="lg:col-span-2">
-            <MonthCalendar 
-              events={eventsForSelectedMonth}
-              currentDate={selectedDate}
-              onDateChange={setSelectedDate}
-            />
-          </div>
-          <div className="lg:col-span-1">
-            <div className="bg-white rounded-lg shadow-sm p-4 border border-gray-100">
-              <h2 className="text-lg font-medium text-gray-900 mb-4">
-                {selectedDate.toLocaleDateString('en-US', {
-                  weekday: 'long',
-                  year: 'numeric',
-                  month: 'long',
-                  day: 'numeric',
-                })}
-              </h2>
-              <EventList
-                events={eventsForSelectedDate}
-                onEventClick={handleEventClick}
-                emptyMessage="No events for this date"
-              />
-            </div>
-          </div>
-        </div>
+      <h1 className="text-2xl font-semibold mb-2">
+        Calendar Home – {year}
+      </h1>
 
-        <EventDetailsModal
-          event={selectedEvent}
-          onClose={() => setSelectedEvent(null)}
+      <GlobalSearchBar value={query} onChange={setQuery} />
+
+      {query ? (
+        <EventList
+          events={results}
+          title={`Search results (${results.length})`}
         />
-      </PageContainer>
-    </div>
+      ) : (
+        <section className="mt-6">
+          <h2 className="text-sm font-semibold text-slate-200 mb-2">
+            Select a month
+          </h2>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+            {months.map((month) => (
+              <button
+                key={month.id}
+                onClick={() => onSelectMonth(month.id)}
+                className="rounded-xl border border-slate-800 bg-slate-900/80 px-3 py-4 text-left hover:border-pink-500/70 hover:bg-pink-500/10 transition"
+              >
+                <div className="text-sm font-semibold text-slate-100">
+                  {month.name}
+                </div>
+                <div className="text-xs text-slate-400">
+                  {month.days} days
+                </div>
+              </button>
+            ))}
+          </div>
+        </section>
+      )}
+    </main>
   );
 };

@@ -1,40 +1,14 @@
-import { useState, useCallback } from 'react';
-import type { Event } from '../data';
+import { useMemo, useState } from "react";
+import type { CalendarItem } from "../utils/types";
+import { filterByQuery } from "../utils/filterUtils";
 
-export const useSearch = (events: Event[]) => {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [searchResults, setSearchResults] = useState<Event[]>([]);
-  const [isSearching, setIsSearching] = useState(false);
+export const useSearch = (items: CalendarItem[]) => {
+  const [query, setQuery] = useState("");
 
-  const searchEvents = useCallback((query: string) => {
-    if (!query.trim()) {
-      setSearchResults([]);
-      return;
-    }
+  const results = useMemo(
+    () => filterByQuery(items, query),
+    [items, query]
+  );
 
-    setIsSearching(true);
-    
-    // Simple case-insensitive search by title, description, and location
-    const results = events.filter(event => {
-      const searchableText = `${event.title} ${event.description || ''} ${event.location || ''}`.toLowerCase();
-      return searchableText.includes(query.toLowerCase());
-    });
-
-    setSearchResults(results);
-    setIsSearching(false);
-  }, [events]);
-
-  const clearSearch = useCallback(() => {
-    setSearchQuery('');
-    setSearchResults([]);
-  }, []);
-
-  return {
-    searchQuery,
-    setSearchQuery,
-    searchResults,
-    isSearching,
-    searchEvents,
-    clearSearch,
-  };
+  return { query, setQuery, results };
 };

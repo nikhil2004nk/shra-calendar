@@ -1,62 +1,26 @@
 [
   {
     "id": "movie",
-    "name": "Movie",
-    "color": "purple",
-    "icon": "film"
+    "label": "Movie Release",
+    "color": "bg-purple-100 text-purple-800",
+    "textColor": "text-purple-800"
   },
   {
-    "id": "conference",
-    "name": "Conference",
-    "color": "blue",
-    "icon": "users"
+    "id": "event",
+    "label": "Public Event",
+    "color": "bg-blue-100 text-blue-800",
+    "textColor": "text-blue-800"
   },
   {
-    "id": "festival",
-    "name": "Festival",
-    "color": "green",
-    "icon": "music"
+    "id": "function",
+    "label": "Function / Award Show",
+    "color": "bg-green-100 text-green-800",
+    "textColor": "text-green-800"
   },
   {
-    "id": "exhibition",
-    "name": "Exhibition",
-    "color": "yellow",
-    "icon": "image"
-  },
-  {
-    "id": "gala",
-    "name": "Gala",
-    "color": "red",
-    "icon": "star"
-  },
-  {
-    "id": "launch",
-    "name": "Product Launch",
-    "color": "indigo",
-    "icon": "rocket"
-  },
-  {
-    "id": "charity",
-    "name": "Charity",
-    "color": "pink",
-    "icon": "heart"
-  },
-  {
-    "id": "meeting",
-    "name": "Meeting",
-    "color": "gray",
-    "icon": "briefcase"
-  },
-  {
-    "id": "workshop",
-    "name": "Workshop",
-    "color": "teal",
-    "icon": "tool"
-  },
-  {
-    "id": "webinar",
-    "name": "Webinar",
-    "color": "cyan",
-    "icon": "video"
+    "id": "movie-anniversary",
+    "label": "Movie Anniversary",
+    "color": "bg-amber-100 text-amber-800",
+    "textColor": "text-amber-800"
   }
 ]

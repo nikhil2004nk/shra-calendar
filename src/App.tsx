@@ -1,46 +1,47 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import { Toaster } from 'react-hot-toast';
-import './index.css';
+import React, { useState } from "react";
+import { LandingPage } from "./pages/LandingPage";
+import { CalendarHomePage } from "./pages/CalendarHomePage";
+import { MonthlyViewPage } from "./pages/MonthlyViewPage";
 
-// Pages
-import { LandingPage } from './pages/LandingPage';
-import { CalendarHomePage } from './pages/CalendarHomePage';
-import { MonthlyViewPage } from './pages/MonthlyViewPage';
-import { CurrentMonthView } from './pages/CurrentMonthView';
-import { MonthSelectionView } from './pages/MonthSelectionView';
-
-// Create a client
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      staleTime: 1000 * 60 * 5, // 5 minutes
-      retry: 1,
-    },
-  },
-});
+type View = "landing" | "calendar-home" | "month";
 
 function App() {
-  return (
-    <QueryClientProvider client={queryClient}>
-      <Router>
-        <div className="min-h-screen bg-gray-50">
-          <Routes>
-            <Route path="/" element={<LandingPage />} />
-            <Route path="/calendar" element={<CalendarHomePage />} />
-            <Route path="/monthly" element={<MonthlyViewPage />} />
-            <Route path="/current-month" element={<CurrentMonthView />} />
-            <Route path="/month-selection" element={<MonthSelectionView />} />
-            {/* Add a catch-all route for 404 pages */}
-            <Route path="*" element={<div>404 - Page Not Found</div>} />
-          </Routes>
-          <Toaster position="bottom-right" />
-        </div>
-      </Router>
-      <ReactQueryDevtools initialIsOpen={false} />
-    </QueryClientProvider>
-  );
+  const [view, setView] = useState<View>("landing");
+  const [selectedMonth, setSelectedMonth] = useState<number | null>(null);
+
+  // Change this to 2025 to see anniversaries like "4 years of The Last Adventure"
+  const [year] = useState<number>(2026);
+
+  if (view === "landing") {
+    return (
+      <LandingPage onExplore={() => setView("calendar-home")} />
+    );
+  }
+
+  if (view === "calendar-home") {
+    return (
+      <CalendarHomePage
+        year={year}
+        onBack={() => setView("landing")}
+        onSelectMonth={(monthId) => {
+          setSelectedMonth(monthId);
+          setView("month");
+        }}
+      />
+    );
+  }
+
+  if (view === "month" && selectedMonth != null) {
+    return (
+      <MonthlyViewPage
+        year={year}
+        monthId={selectedMonth}
+        onBack={() => setView("calendar-home")}
+      />
+    );
+  }
+
+  return null;
 }
 
 export default App;

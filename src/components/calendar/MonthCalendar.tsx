@@ -1,58 +1,66 @@
-// src/components/calendar/MonthCalendar.tsx
-import type { Event } from '../../data';
-import { MonthGrid } from './MonthGrid';
-import { format } from 'date-fns';
+import React from "react";
+import type { Event } from "../../utils/types";
+import type { MonthMeta } from "../../utils/dateUtils";
+import { buildDateKey } from "../../utils/dateUtils";
+import { DayCell } from "./DayCell";
+
 interface MonthCalendarProps {
-  events: Event[];
-  currentDate: Date;
-  onDateChange: (date: Date) => void;
+  year: number;
+  monthMeta: MonthMeta;
+  eventsByDate: Record<string, Event[]>;
+  onDayClick?: (date: string, events: Event[]) => void;
 }
 
-export const MonthCalendar: React.FC<MonthCalendarProps> = ({ 
-  events, 
-  currentDate,
-  onDateChange 
+export const MonthCalendar: React.FC<MonthCalendarProps> = ({
+  year,
+  monthMeta,
+  eventsByDate,
+  onDayClick
 }) => {
-  const nextMonth = () => {
-    const newDate = new Date(currentDate);
-    newDate.setMonth(newDate.getMonth() + 1);
-    onDateChange(newDate);
-  };
+  const { days, firstWeekday, id: month } = monthMeta;
 
-  const prevMonth = () => {
-    const newDate = new Date(currentDate);
-    newDate.setMonth(newDate.getMonth() - 1);
-    onDateChange(newDate);
-  };
+  const leadingEmpty = (firstWeekday + 6) % 7;
+  const totalCells = leadingEmpty + days;
+  const weeks: (number | null)[][] = [];
+  let currentDay = 1;
+
+  for (let i = 0; i < totalCells; i++) {
+    const weekIndex = Math.floor(i / 7);
+    if (!weeks[weekIndex]) weeks[weekIndex] = [];
+    if (i < leadingEmpty) {
+      weeks[weekIndex].push(null);
+    } else {
+      weeks[weekIndex].push(currentDay++);
+    }
+  }
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-4">
-      <div className="flex justify-between items-center mb-4">
-        <button 
-          onClick={prevMonth}
-          className="p-2 rounded-full hover:bg-gray-100"
-          aria-label="Previous month"
-        >
-          &larr;
-        </button>
-        <h2 className="text-xl font-semibold">
-          {format(currentDate, 'MMMM yyyy')}
-        </h2>
-        <button 
-          onClick={nextMonth}
-          className="p-2 rounded-full hover:bg-gray-100"
-          aria-label="Next month"
-        >
-          &rarr;
-        </button>
+    <div className="mt-4 rounded-xl border border-slate-800 bg-slate-900/80 p-4 shadow-xl">
+      <div className="grid grid-cols-7 text-center text-xs font-semibold uppercase tracking-wide text-slate-400">
+        {["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map((d) => (
+          <div key={d} className="py-2">
+            {d}
+          </div>
+        ))}
       </div>
-      
-      <MonthGrid 
-        month={currentDate.getMonth()}
-        year={currentDate.getFullYear()}
-        events={events}
-        onDateSelect={(date) => onDateChange(date)}
-      />
+      <div className="grid grid-cols-7 gap-1 text-sm">
+        {weeks.flat().map((day, idx) => {
+          if (!day) return <div key={idx} className="h-16" />;
+
+          const dateKey = buildDateKey(year, month, day);
+          const eventsForDay = eventsByDate[dateKey] ?? [];
+
+          return (
+            <DayCell
+              key={dateKey}
+              day={day}
+              dateKey={dateKey}
+              events={eventsForDay}
+              onClick={() => onDayClick?.(dateKey, eventsForDay)}
+            />
+          );
+        })}
+      </div>
     </div>
   );
 };
