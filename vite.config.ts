@@ -7,7 +7,7 @@ export default defineConfig(({ mode }) => {
   
   // Check if we're in production mode (GitHub Pages)
   const isProduction = env.NODE_ENV === 'production' || process.env.NODE_ENV === 'production';
-  const base = isProduction ? '/shra-calendar/' : '/';
+  const base = isProduction ? '/shra-calender/' : '/';
 
   return {
     plugins: [react()],
