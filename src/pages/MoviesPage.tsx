@@ -167,11 +167,47 @@ export const MoviesPage: React.FC<MoviesPageProps> = ({ onBack }) => {
       .sort((a, b) => b.year - a.year);
   }, [processedMovies]);
 
-  // 4. Update the upcomingMovies sort to handle undefined values
+  // Get released movies - includes movies with past or current dates
+  const releasedMovies = React.useMemo(() => {
+    return processedMovies
+      .filter(movie => {
+        // Exclude upcoming movies
+        if (movie.type === 'upcoming') return false;
+        
+        // Include if the date is in the past or today
+        if (movie._date && movie._date <= currentDate) return true;
+        
+        return false;
+      })
+      .sort((a, b) => {
+        // Sort by date in descending order (newest first)
+        return (b._date as Date).getTime() - (a._date as Date).getTime();
+      });
+  }, [processedMovies, currentDate]);
+
+  // Get upcoming movies - includes movies with future dates, type 'upcoming', or TBA dates
   const upcomingMovies = React.useMemo(() => {
     return processedMovies
-      .filter(movie => movie._date && movie._date > currentDate)
-      .sort((a, b) => (a._date as Date).getTime() - (b._date as Date).getTime());
+      .filter(movie => {
+        // Include if it's explicitly marked as upcoming
+        if (movie.type === 'upcoming') return true;
+        
+        // Include if the date is in the future
+        if (movie._date && movie._date > currentDate) return true;
+        
+        // Include if the date is TBA or invalid
+        if (!movie.date || movie.date.toUpperCase() === 'TBA') return true;
+        
+        return false;
+      })
+      .sort((a, b) => {
+        // Sort TBA dates to the end
+        if (!a.date || a.date.toUpperCase() === 'TBA') return 1;
+        if (!b.date || b.date.toUpperCase() === 'TBA') return -1;
+        
+        // Sort by date for dated movies
+        return (a._date as Date).getTime() - (b._date as Date).getTime();
+      });
   }, [processedMovies, currentDate]);
   
   const handleMovieClick = (movie: Movie) => {
@@ -322,8 +358,31 @@ export const MoviesPage: React.FC<MoviesPageProps> = ({ onBack }) => {
           )}
         </div>
 
+        {/* Released Movies Section */}
+        {releasedMovies.length > 0 && (
+          <section className="mb-12">
+            <h2 className="text-2xl font-bold text-white mb-6 flex items-center">
+              <span className="bg-gradient-to-r from-pink-500 to-purple-600 text-transparent bg-clip-text">
+                Released Movies
+              </span>
+              <span className="ml-2 text-sm text-slate-400">
+                • {releasedMovies.length} {releasedMovies.length === 1 ? 'Movie' : 'Movies'}
+              </span>
+            </h2>
+            <div className="space-y-3">
+              {releasedMovies.map((movie) => (
+                <MovieListItem 
+                  key={movie.id} 
+                  movie={movie} 
+                  onClick={() => handleMovieClick(movie)} 
+                />
+              ))}
+            </div>
+          </section>
+        )}
+
         {/* Upcoming Movies Section */}
-        {filterMovies(processedMovies).filter(movie => movie._date > currentDate).length > 0 && (
+        {upcomingMovies.length > 0 && (processedMovies).filter(movie => movie._date > currentDate).length > 0 && (
           <section className="mb-12">
             <h2 className="text-2xl font-bold mb-4 text-pink-400 border-b border-pink-900 pb-2">
               Upcoming Movies • {upcomingMovies.length}
@@ -388,20 +447,32 @@ interface MovieListItemProps {
 
 
 const MovieListItem = ({ movie, onClick }: MovieListItemProps) => {
-  const getFormattedDate = (dateString: string) => {
+  const getFormattedDate = (dateString: string, isUpcoming: boolean = false) => {
     try {
-      return format(parseISO(dateString), 'MMM d, yyyy');
+      if (!dateString || dateString.toUpperCase() === 'TBA') {
+        return { date: 'TBA', isTBA: true, isUpcoming: true };
+      }
+      const date = parseISO(dateString);
+      if (isNaN(date.getTime())) return { date: 'TBA', isTBA: true, isUpcoming: true };
+      return {
+        date: format(date, 'MMM d, yyyy'),
+        isTBA: false,
+        isUpcoming: isUpcoming || date > new Date()
+      };
     } catch (e) {
-      return dateString;
+      console.error('Error formatting date:', e);
+      return { date: 'TBA', isTBA: true };
     }
   };
 
-
-  const formatDuration = (minutes: number) => {
+  const formatDuration = (minutes?: number) => {
+    if (!minutes) return '';
     const hours = Math.floor(minutes / 60);
     const mins = minutes % 60;
     return hours > 0 ? `${hours}h ${mins}m` : `${mins}m`;
   };
+  
+  const isUpcoming = movie._date > new Date();
 
 
   return (
@@ -455,10 +526,15 @@ const MovieListItem = ({ movie, onClick }: MovieListItemProps) => {
         <div className="flex flex-wrap items-center mt-1 text-sm text-slate-400">
           <div className="flex items-center">
             <CalendarIcon className="w-3.5 h-3.5 mr-1.5 text-pink-400/80" />
-            <span>{getFormattedDate(movie.date)}</span>
+            <span className="mr-1">{getFormattedDate(movie.date, isUpcoming).date}</span>
+            {isUpcoming && (
+              <span className="text-xs bg-pink-900/30 text-pink-300 px-1.5 py-0.5 rounded-full">
+                Expected
+              </span>
+            )}
           </div>
           
-          {movie.duration && (
+          {!isUpcoming && movie.duration && (
             <>
               <span className="mx-2 text-slate-600">•</span>
               <div className="flex items-center">
@@ -513,8 +589,8 @@ const MovieDetailModal: React.FC<{ movie: Movie | null; isOpen: boolean; onClose
   };
 
 
-  const formatDuration = (minutes?: number) => {
-    if (!minutes) return 'N/A';
+  const formatDuration = (minutes?: number, isUpcoming: boolean = false) => {
+    if (!minutes || isUpcoming) return 'TBA';
     const hours = Math.floor(minutes / 60);
     const mins = minutes % 60;
     return `${hours}h ${mins}m`;
@@ -578,7 +654,7 @@ const MovieDetailModal: React.FC<{ movie: Movie | null; isOpen: boolean; onClose
                   {movie.duration && (
                     <div className="flex items-center gap-2">
                       <ClockIcon className="h-5 w-5 text-pink-500" />
-                      <span>{formatDuration(movie.duration)}</span>
+                      <span>{formatDuration(movie.duration, movie?._date && movie._date > new Date())}</span>
                     </div>
                   )}
                   {movie.director && (
