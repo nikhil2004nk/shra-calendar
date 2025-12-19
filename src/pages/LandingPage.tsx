@@ -4,13 +4,14 @@ interface LandingPageProps {
   onGoCurrentMonth: () => void;
   onGoViewCalendar: () => void;
   onGoMonthly: () => void;
+  onGoMovies: () => void;
 }
-
 
 export const LandingPage: React.FC<LandingPageProps> = ({
   onGoCurrentMonth,
   onGoViewCalendar,
-  onGoMonthly
+  onGoMonthly,
+  onGoMovies
 }) => {
   return (
     <main className="min-h-screen bg-slate-950 text-slate-50 flex flex-col">
@@ -41,6 +42,22 @@ export const LandingPage: React.FC<LandingPageProps> = ({
             className="flex-1 rounded-xl bg-slate-900 border border-slate-700 px-4 py-3 text-sm font-semibold text-slate-100 hover:bg-slate-800 transition"
           >
             Monthly Navigator
+          </button>
+        </div>
+
+        <div className="w-full max-w-xl mt-4">
+          <button
+            onClick={onGoMovies}
+            className="w-full rounded-xl bg-purple-900 border border-purple-800 px-4 py-3 text-sm font-semibold text-purple-100 hover:bg-purple-800 transition flex items-center justify-center gap-2"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <rect x="2" y="4" width="20" height="20" rx="2.18" ry="2.18"></rect>
+              <line x1="7" y1="4" x2="7" y2="24"></line>
+              <line x1="17" y1="4" x2="17" y2="24"></line>
+              <line x1="2" y1="16" x2="22" y2="16"></line>
+              <line x1="2" y1="8" x2="22" y2="8"></line>
+            </svg>
+            View All Movies
           </button>
         </div>
       </section>

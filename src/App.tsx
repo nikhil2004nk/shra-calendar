@@ -3,6 +3,7 @@ import { LandingPage } from "./pages/LandingPage";
 import { CalendarHomePage } from "./pages/CalendarHomePage";
 import { MonthlyViewPage } from "./pages/MonthlyViewPage";
 import { CurrentMonthPage } from "./pages/CurrentMonthPage";
+import { MoviesPage } from "./pages/MoviesPage";
 import { months } from "./data";
 
 type View =
@@ -10,7 +11,8 @@ type View =
   | "current-month"
   | "calendar-home"
   | "calendar-home-month"
-  | "monthly";
+  | "monthly"
+  | "movies";
 
 function getCurrentYearMonth() {
   const now = new Date();
@@ -40,6 +42,7 @@ function App() {
         onGoCurrentMonth={() => setView("current-month")}
         onGoViewCalendar={() => setView("calendar-home")}
         onGoMonthly={() => setView("monthly")}
+        onGoMovies={() => setView("movies")}
       />
     );
   }
@@ -91,6 +94,10 @@ function App() {
         onMonthChange={(newMonthId) => setSelectedMonth(newMonthId)}
       />
     );
+  }
+
+  if (view === "movies") {
+    return <MoviesPage onBack={() => setView("landing")} />;
   }
 
   return null;
