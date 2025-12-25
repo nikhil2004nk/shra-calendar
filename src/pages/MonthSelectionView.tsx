@@ -116,11 +116,11 @@ export const MonthSelectionView: React.FC = () => {
         <div className="flex items-center space-x-4">
           <button
             onClick={() => navigate('/')}
-            className="flex items-center text-gray-600 hover:text-gray-900"
+            className="flex items-center text-sm text-slate-400 hover:text-slate-200 px-3 py-1.5 rounded-lg bg-slate-900/50 hover:bg-slate-800/50 transition-colors"
             title="Back to Home"
           >
-            <Home className="w-5 h-5 mr-1" />
-            Home
+            <Home className="w-4 h-4 mr-1.5" />
+            Back to home
           </button>
           <button
             onClick={navigateToPrevYear}

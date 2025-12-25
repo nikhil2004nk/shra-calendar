@@ -62,12 +62,14 @@ export const CurrentMonthPage: React.FC<CurrentMonthPageProps> = ({
 
   return (
     <main className="min-h-screen bg-slate-950 text-slate-50 px-4 py-6">
-      <button
-        onClick={onBack}
-        className="text-xs text-slate-400 hover:text-slate-200 mb-4"
-      >
-        ← Back to home
-      </button>
+      <div className="mb-4">
+        <button
+          onClick={onBack}
+          className="text-sm text-slate-400 hover:text-slate-200 px-3 py-1.5 rounded-lg bg-slate-900/50 hover:bg-slate-800/50 transition-colors"
+        >
+          ← Back to home
+        </button>
+      </div>
 
       <h1 className="text-2xl font-semibold mb-2">
         Current Month – {monthMeta.name} {year}

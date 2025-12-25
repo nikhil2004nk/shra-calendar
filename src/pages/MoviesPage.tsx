@@ -219,12 +219,14 @@ if (releaseFilter === 'released') {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-950 to-slate-900 text-slate-50 p-4 sm:p-6 md:p-8">
       <div className="max-w-4xl mx-auto">
-        <button
-          onClick={onBack}
-          className="text-xs text-slate-400 hover:text-slate-200 mb-8 inline-block"
-        >
-          ← Back to home
-        </button>
+        <div className="mb-4">
+          <button
+            onClick={onBack}
+            className="text-sm text-slate-400 hover:text-slate-200 px-3 py-1.5 rounded-lg bg-slate-900/50 hover:bg-slate-800/50 transition-colors"
+          >
+            ← Back to home
+          </button>
+        </div>
         
         <div className="text-center mb-10">
           <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-pink-400 to-amber-400 bg-clip-text text-transparent mb-2">

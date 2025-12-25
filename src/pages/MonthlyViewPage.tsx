@@ -58,43 +58,40 @@ export const MonthlyViewPage: React.FC<MonthlyViewPageProps> = ({
   };
 
   return (
-    <main className="min-h-screen bg-slate-950 text-slate-50 px-4 py-6 space-y-3">
-      {/* header ... unchanged */}
-      <div className="flex items-center justify-between gap-2">
-        <div className="flex gap-2">
-          {mode === "calendar-home" && onBackToSelection && (
-            <button
-              onClick={onBackToSelection}
-              className="text-xs text-slate-400 hover:text-slate-200"
-            >
-              ← Back to month selection
-            </button>
-          )}
+    <main className="min-h-screen bg-slate-950 text-slate-50 px-4 py-6 space-y-4">
+      {/* Back buttons row */}
+      <div className="flex gap-3">
+        {mode === "calendar-home" && onBackToSelection && (
           <button
-            onClick={onBackToLanding}
-            className="text-xs text-slate-400 hover:text-slate-200"
+            onClick={onBackToSelection}
+            className="text-sm text-slate-400 hover:text-slate-200 px-3 py-1.5 rounded-lg bg-slate-900/50 hover:bg-slate-800/50 transition-colors"
           >
-            ← Back to home
+            ← Back to month selection
           </button>
-        </div>
+        )}
+        <button
+          onClick={onBackToLanding}
+          className="text-sm text-slate-400 hover:text-slate-200 px-3 py-1.5 rounded-lg bg-slate-900/50 hover:bg-slate-800/50 transition-colors"
+        >
+          ← Back to home
+        </button>
+      </div>
 
-        <div className="flex items-center gap-2">
-          <button
-            onClick={handlePrev}
-            className="rounded-full bg-slate-900 border border-slate-700 px-3 py-1 text-xs text-slate-100 hover:bg-slate-800 transition"
-          >
-            ◀ Prev
-          </button>
-          <span className="text-sm text-slate-200 font-semibold">
-            {monthMeta.name} {year}
-          </span>
-          <button
-            onClick={handleNext}
-            className="rounded-full bg-slate-900 border border-slate-700 px-3 py-1 text-xs text-slate-100 hover:bg-slate-800 transition"
-          >
-            Next ▶
-          </button>
-        </div>
+      {/* Month navigation row */}
+      <div className="flex items-center justify-between bg-slate-900/50 rounded-lg p-2">
+        <button
+          onClick={handlePrev}
+          className="rounded-lg bg-slate-800/50 border border-slate-700 px-4 py-2 text-sm text-slate-100 hover:bg-slate-700/50 transition-colors"
+        >
+          ◀ Previous Month
+        </button>
+        
+        <button
+          onClick={handleNext}
+          className="rounded-lg bg-slate-800/50 border border-slate-700 px-4 py-2 text-sm text-slate-100 hover:bg-slate-700/50 transition-colors"
+        >
+          Next Month ▶
+        </button>
       </div>
 
       <MonthCalendar
