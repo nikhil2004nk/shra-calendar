@@ -44,6 +44,7 @@ interface MonthlySummaryProps {
 }
 
 const MonthlySummary: React.FC<MonthlySummaryProps> = ({ eventsByDate, onEventClick }) => {
+  const currentDate = new Date();
   const allEvents = Object.values(eventsByDate).flat();
   const totalEvents = allEvents.length;
 
@@ -59,7 +60,7 @@ const MonthlySummary: React.FC<MonthlySummaryProps> = ({ eventsByDate, onEventCl
   const firstEventDate = allEvents[0].date;
   const date = new Date(firstEventDate);
   const monthName = date.toLocaleString('default', { month: 'long' });
-  const year = date.getFullYear();
+  const yearNum = date.getFullYear();
 
   // Calculate summary statistics
   const summary = useMemo(() => {
@@ -90,7 +91,12 @@ const MonthlySummary: React.FC<MonthlySummaryProps> = ({ eventsByDate, onEventCl
     <div className="space-y-6">
       {/* Previous Summary Section */}
       <div className="mt-6 rounded-xl border border-slate-800 bg-slate-900/80 p-6">
-        <h3 className="mb-4 text-xl font-semibold text-white">Monthly Overview</h3>
+        <h3 className="mb-4 text-xl font-semibold text-white">
+          {monthName} {yearNum} Overview
+          {currentDate.getMonth() === date.getMonth() && currentDate.getFullYear() === yearNum && (
+            <span className="ml-2 text-sm font-normal text-slate-400">(Current Month)</span>
+          )}
+        </h3>
         
         <div className="mb-6">
           <div className="mb-2 flex items-center justify-between">
@@ -118,18 +124,28 @@ const MonthlySummary: React.FC<MonthlySummaryProps> = ({ eventsByDate, onEventCl
         <div className="mb-2">
           <h4 className="mb-3 text-sm font-medium text-slate-300">Events by Day</h4>
           <div className="grid grid-cols-7 gap-2 text-center">
-            {summary.weekdays.map(({ day, count, percentage }) => (
-              <div key={day} className="flex flex-col items-center">
-                <div className="text-xs text-slate-400">{day[0]}</div>
-                <div className="mt-1 h-1.5 w-full overflow-hidden rounded-full bg-slate-800">
-                  <div 
-                    className="h-full bg-blue-500" 
-                    style={{ width: `${percentage}%` }}
-                  />
+            {summary.weekdays.map(({ day, count, percentage }) => {
+              const isToday = 
+                currentDate.getDate() === parseInt(day, 10) && 
+                currentDate.getMonth() + 1 === date.getMonth() + 1 && 
+                currentDate.getFullYear() === yearNum;
+                
+              return (
+                <div key={day} className="flex flex-col items-center">
+                  <div className="text-xs text-slate-400">{day[0]}</div>
+                  <div className="relative mt-1 h-1.5 w-full overflow-hidden rounded-full bg-slate-800">
+                    {isToday && (
+                      <div className="absolute inset-0 border-2 border-blue-500 rounded-full pointer-events-none" />
+                    )}
+                    <div 
+                      className="h-full bg-blue-500" 
+                      style={{ width: `${percentage}%` }}
+                    />
+                  </div>
+                  <div className="mt-1 text-xs font-medium text-slate-300">{count}</div>
                 </div>
-                <div className="mt-1 text-xs font-medium text-slate-300">{count}</div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </div>
@@ -137,7 +153,7 @@ const MonthlySummary: React.FC<MonthlySummaryProps> = ({ eventsByDate, onEventCl
      {/* Event List Section */}
 <div className="rounded-xl border border-slate-800 bg-slate-900/80 p-6">
   <h3 className="mb-6 text-xl font-semibold text-white">
-    All events in {monthName} {year} ({totalEvents})
+    All events in {monthName} {yearNum} ({totalEvents})
   </h3>
   
   <div className="space-y-4">
@@ -224,7 +240,6 @@ export const MonthCalendar: React.FC<MonthCalendarProps> = ({
     }
   };
   const { days, firstWeekday, id: month } = monthMeta;
-  const today = new Date();
   
   // Memoize the weeks calculation
   const weeks = useMemo(() => {
@@ -246,24 +261,49 @@ export const MonthCalendar: React.FC<MonthCalendarProps> = ({
   }, [firstWeekday, days]);
 
   const monthName = format(new Date(year, month - 1, 1), 'MMMM yyyy');
+  const currentDate = new Date();
+  const isCurrentMonth = currentDate.getFullYear() === year && currentDate.getMonth() + 1 === month;
 
   return (
     <div className={className}>
-      <div className="mb-4 flex items-center justify-between px-1">
-        <h2 className="text-xl font-bold text-white">{monthName}</h2>
+      <div className="mb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2 px-1">
+        <h2 className="text-xl font-bold text-white">
+          {monthName}
+          {isCurrentMonth && (
+            <span className="ml-2 text-sm font-normal text-slate-400">(Current Month)</span>
+          )}
+        </h2>
         <div className="flex space-x-2">
           <button 
             onClick={onTodayClick}
             disabled={!onTodayClick}
             className={cn(
-              "rounded-lg px-3 py-1.5 text-sm font-medium transition-colors",
+              "flex items-center justify-center rounded-lg px-3 py-1.5 text-sm font-medium transition-colors",
               onTodayClick 
-                ? "bg-blue-600 text-white hover:bg-blue-700"
-                : "bg-slate-700/50 text-slate-400 cursor-not-allowed"
+                ? "bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-slate-900"
+                : "bg-slate-700/50 text-slate-400 cursor-not-allowed",
+              "group relative overflow-hidden"
             )}
             title="Go to today"
           >
-            Today
+            <span className="relative z-10 flex items-center">
+              <svg 
+                xmlns="http://www.w3.org/2000/svg" 
+                className="mr-1.5 h-4 w-4" 
+                fill="none" 
+                viewBox="0 0 24 24" 
+                stroke="currentColor"
+              >
+                <path 
+                  strokeLinecap="round" 
+                  strokeLinejoin="round" 
+                  strokeWidth={2} 
+                  d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" 
+                />
+              </svg>
+              <span>Today</span>
+            </span>
+            <span className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-10 transition-opacity" />
           </button>
         </div>
       </div>
@@ -289,15 +329,15 @@ export const MonthCalendar: React.FC<MonthCalendarProps> = ({
             const dateKey = buildDateKey(year, month, day);
             const eventsForDay = eventsByDate[dateKey] || [];
             const isToday = 
-              day === today.getDate() && 
-              month - 1 === today.getMonth() && 
-              year === today.getFullYear();
+              day === currentDate.getDate() && 
+              month - 1 === currentDate.getMonth() && 
+              year === currentDate.getFullYear();
 
             return (
               <div 
                 key={dateKey} 
                 className={cn(
-                  "group relative min-h-[4rem] bg-slate-900/50 transition-colors sm:min-h-[7rem]",
+                  "group relative min-h-[4rem] bg-slate-900/50 transition-all duration-200 sm:min-h-[7rem] hover:bg-slate-800/50",
                   eventsForDay.length > 0 ? "cursor-pointer hover:bg-slate-800/50" : ""
                 )}
                 onClick={() => eventsForDay.length > 0 && onDayClick?.(dateKey, eventsForDay)}
