@@ -60,3 +60,39 @@ export const getMovieAnniversariesForYear = (
 
   return result;
 };
+
+export const getAwardAnniversariesForYear = (
+  awards: Array<{ id: string; title: string; date: string; description: string }>,
+  targetYear: number
+): CalendarItem[] => {
+  const result: CalendarItem[] = [];
+
+  for (const award of awards) {
+    const { year: awardYear, month, day } = parseDateParts(award.date);
+    if (!awardYear || !month || !day) continue;
+    
+    if (targetYear < awardYear) continue; // Skip future years
+    
+    const yearsAgo = targetYear - awardYear;
+    const date = buildDateKey(targetYear, month, day);
+    
+   // In getAwardAnniversariesForYear function
+// In getAwardAnniversariesForYear function
+// In getAwardAnniversariesForYear function
+result.push({
+  id: `${award.id}-${targetYear}`,
+  title: award.title,
+  date,
+  originalDate: award.date, // Preserve original date
+  month,
+  type: 'function' as const,
+  meta: {
+    anniversaryYears: yearsAgo > 0 ? yearsAgo : undefined,
+    originalDate: award.date // Keep in meta for backward compatibility
+  },
+  description: award.description,
+});
+  }
+
+  return result;
+};

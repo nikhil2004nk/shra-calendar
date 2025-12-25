@@ -2,7 +2,8 @@ export type CalendarItemType =
   | "movie"
   | "event"
   | "function"
-  | "movie-anniversary";
+  | "movie-anniversary"
+  | "award";
 
 export interface MonthMeta {
   id: number;
@@ -35,13 +36,16 @@ export interface BaseMovie {
 export interface CalendarItem {
   id: string;
   title: string;
+  title2?: string;
   date: string; // YYYY-MM-DD for that year
+  originalDate?: string; // Original date for anniversary events
   month: number; // 1-12
   type: CalendarItemType;
   description: string;
   meta?: {
     baseMovieId?: string;
     anniversaryYears?: number;
+    originalDate?: string; // Keep for backward compatibility
   };
 }
 

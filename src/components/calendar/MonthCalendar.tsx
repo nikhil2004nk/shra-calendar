@@ -4,30 +4,74 @@ import { buildDateKey, cn } from "../../utils";
 import { DayCell } from "./DayCell";
 import { format } from "date-fns";
 
+const getTypeConfig = (type: string) => {
+  switch (type) {
+    case 'movie':
+      return {
+        bg: 'bg-purple-500/15',
+        border: 'border-purple-500/40',
+        text: 'text-purple-100',
+        label: 'Movie'
+      };
+    case 'function':
+      return {
+        bg: 'bg-emerald-500/15',
+        border: 'border-emerald-500/40',
+        text: 'text-emerald-50',
+        label: 'Function'
+      };
+    case 'movie-anniversary':
+      return {
+        bg: 'bg-amber-500/15',
+        border: 'border-amber-500/40',
+        text: 'text-amber-50',
+        label: 'Anniversary'
+      };
+    case 'event':
+    default:
+      return {
+        bg: 'bg-sky-500/15',
+        border: 'border-sky-500/40',
+        text: 'text-sky-50',
+        label: 'Event'
+      };
+  }
+};
+
 interface MonthlySummaryProps {
   eventsByDate: Record<string, Event[]>;
+  onEventClick?: (event: Event) => void;
 }
 
-const MonthlySummary: React.FC<MonthlySummaryProps> = ({ eventsByDate }) => {
+const MonthlySummary: React.FC<MonthlySummaryProps> = ({ eventsByDate, onEventClick }) => {
+  const allEvents = Object.values(eventsByDate).flat();
+  const totalEvents = allEvents.length;
+
+  if (totalEvents === 0) {
+    return (
+      <div className="mt-6 rounded-lg bg-slate-800/50 p-4 text-center text-slate-400">
+        No events scheduled for this month.
+      </div>
+    );
+  }
+
+  // Get month and year from the first event
+  const firstEventDate = allEvents[0].date;
+  const date = new Date(firstEventDate);
+  const monthName = date.toLocaleString('default', { month: 'long' });
+  const year = date.getFullYear();
+
   // Calculate summary statistics
   const summary = useMemo(() => {
-    const allEvents = Object.values(eventsByDate).flat();
-    const totalEvents = allEvents.length;
-    
-    // Count events by type
     const eventsByType: Record<string, number> = {};
-    allEvents.forEach(event => {
-      eventsByType[event.type] = (eventsByType[event.type] || 0) + 1;
-    });
-
-    // Count events by weekday
     const eventsByWeekday: Record<string, number> = {};
     const weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
     weekdays.forEach(day => eventsByWeekday[day] = 0);
     
-    Object.entries(eventsByDate).forEach(([date, events]) => {
-      const dayOfWeek = new Date(date).getDay();
-      eventsByWeekday[weekdays[dayOfWeek]] += events.length;
+    allEvents.forEach(event => {
+      eventsByType[event.type] = (eventsByType[event.type] || 0) + 1;
+      const dayOfWeek = new Date(event.date).getDay();
+      eventsByWeekday[weekdays[dayOfWeek]]++;
     });
 
     return {
@@ -40,60 +84,119 @@ const MonthlySummary: React.FC<MonthlySummaryProps> = ({ eventsByDate }) => {
         percentage: Math.round((eventsByWeekday[day] / totalEvents) * 100) || 0
       }))
     };
-  }, [eventsByDate]);
-
-  if (summary.totalEvents === 0) {
-    return (
-      <div className="mt-6 rounded-lg bg-slate-800/50 p-4 text-center text-slate-400">
-        No events scheduled for this month.
-      </div>
-    );
-  }
+  }, [allEvents, totalEvents]);
 
   return (
-    <div className="mt-6 rounded-xl border border-slate-800 bg-slate-900/80 p-4">
-      <h3 className="mb-3 text-lg font-semibold text-white">Monthly Summary</h3>
-      
-      <div className="mb-4">
-        <div className="mb-2 flex items-center justify-between">
-          <span className="text-sm font-medium text-slate-300">Total Events</span>
-          <span className="rounded-full bg-blue-600/20 px-2.5 py-1 text-xs font-medium text-blue-400">
-            {summary.totalEvents} {summary.totalEvents === 1 ? 'event' : 'events'}
-          </span>
+    <div className="space-y-6">
+      {/* Previous Summary Section */}
+      <div className="mt-6 rounded-xl border border-slate-800 bg-slate-900/80 p-6">
+        <h3 className="mb-4 text-xl font-semibold text-white">Monthly Overview</h3>
+        
+        <div className="mb-6">
+          <div className="mb-2 flex items-center justify-between">
+            <span className="text-sm font-medium text-slate-300">Total Events</span>
+            <span className="rounded-full bg-blue-600/20 px-3 py-1 text-sm font-medium text-blue-400">
+              {summary.totalEvents} {summary.totalEvents === 1 ? 'event' : 'events'}
+            </span>
+          </div>
         </div>
-      </div>
 
-      {Object.keys(summary.eventsByType).length > 0 && (
-        <div className="mb-4">
-          <h4 className="mb-2 text-sm font-medium text-slate-300">By Event Type</h4>
-          <div className="space-y-2">
-            {Object.entries(summary.eventsByType).map(([type, count]) => (
-              <div key={type} className="flex items-center justify-between">
-                <span className="text-sm text-slate-400">{type}</span>
-                <span className="text-sm font-medium text-slate-200">{count}</span>
+        {Object.keys(summary.eventsByType).length > 0 && (
+          <div className="mb-6">
+            <h4 className="mb-3 text-sm font-medium text-slate-300">Events by Type</h4>
+            <div className="space-y-2">
+              {Object.entries(summary.eventsByType).map(([type, count]) => (
+                <div key={type} className="flex items-center justify-between">
+                  <span className="text-sm text-slate-400">{type}</span>
+                  <span className="text-sm font-medium text-slate-200">{count}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        <div className="mb-2">
+          <h4 className="mb-3 text-sm font-medium text-slate-300">Events by Day</h4>
+          <div className="grid grid-cols-7 gap-2 text-center">
+            {summary.weekdays.map(({ day, count, percentage }) => (
+              <div key={day} className="flex flex-col items-center">
+                <div className="text-xs text-slate-400">{day[0]}</div>
+                <div className="mt-1 h-1.5 w-full overflow-hidden rounded-full bg-slate-800">
+                  <div 
+                    className="h-full bg-blue-500" 
+                    style={{ width: `${percentage}%` }}
+                  />
+                </div>
+                <div className="mt-1 text-xs font-medium text-slate-300">{count}</div>
               </div>
             ))}
           </div>
         </div>
-      )}
+      </div>
 
-      <div>
-        <h4 className="mb-2 text-sm font-medium text-slate-300">Events by Day</h4>
-        <div className="grid grid-cols-7 gap-1 text-center">
-          {summary.weekdays.map(({ day, count, percentage }) => (
-            <div key={day} className="flex flex-col items-center">
-              <div className="text-xs text-slate-400">{day[0]}</div>
-              <div className="mt-1 h-1 w-full overflow-hidden rounded-full bg-slate-800">
-                <div 
-                  className="h-full bg-blue-500" 
-                  style={{ width: `${percentage}%` }}
-                />
+     {/* Event List Section */}
+<div className="rounded-xl border border-slate-800 bg-slate-900/80 p-6">
+  <h3 className="mb-6 text-xl font-semibold text-white">
+    All events in {monthName} {year} ({totalEvents})
+  </h3>
+  
+  <div className="space-y-4">
+    {Object.entries(eventsByDate)
+      .sort(([dateA], [dateB]) => new Date(dateA).getTime() - new Date(dateB).getTime())
+      .map(([date, events]) => (
+        <div key={date} className="space-y-3">
+          {events.map((event, index) => (
+            <div 
+              key={`${date}-${index}`} 
+              className="rounded-lg bg-slate-800/50 p-5 hover:bg-slate-800/70 transition-colors cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-slate-900"
+              onClick={() => onEventClick?.(event)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  onEventClick?.(event);
+                }
+              }}
+              tabIndex={0}
+              role="button"
+              aria-label={`View details for ${event.title}`}
+            >
+              <div className="flex flex-wrap items-center gap-2 mb-2">
+                {(() => {
+                  const config = getTypeConfig(event.type);
+                  return (
+                    <span 
+                      className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-medium ${config.bg} ${config.border} ${config.text}`}
+                    >
+                      {config.label}
+                    </span>
+                  );
+                })()}
+                <span className="text-xs text-slate-400">
+                  {new Date(date).toLocaleDateString('en-US', { 
+                    year: 'numeric', 
+                    month: 'short', 
+                    day: 'numeric' 
+                  })}
+                </span>
               </div>
-              <div className="mt-1 text-xs font-medium text-slate-300">{count}</div>
+              
+              <h4 className="text-lg font-semibold text-white">{event.title}</h4>
+              
+              {event.title2 && (
+                <p className="mt-1 text-sm text-slate-300">{event.title2}</p>
+              )}
+              
+              {event.description && (
+                <div className="mt-3 pt-3 border-t border-slate-700">
+                  <p className="text-sm text-slate-300">{event.description}</p>
+                </div>
+              )}
             </div>
           ))}
         </div>
-      </div>
+      ))}
+  </div>
+</div>
     </div>
   );
 };
@@ -115,6 +218,11 @@ export const MonthCalendar: React.FC<MonthCalendarProps> = ({
   onTodayClick,
   className,
 }) => {
+  const handleEventClick = (event: Event) => {
+    if (onDayClick) {
+      onDayClick(event.date, [event]);
+    }
+  };
   const { days, firstWeekday, id: month } = monthMeta;
   const today = new Date();
   
@@ -207,7 +315,10 @@ export const MonthCalendar: React.FC<MonthCalendarProps> = ({
       </div>
       
       {/* Monthly Summary Section */}
-      <MonthlySummary eventsByDate={eventsByDate} />
+      <MonthlySummary 
+        eventsByDate={eventsByDate} 
+        onEventClick={handleEventClick}
+      />
     </div>
   );
 };

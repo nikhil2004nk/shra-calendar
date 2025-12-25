@@ -4,6 +4,7 @@ import { movies } from "./movies";
 import { events, functionsData } from "./events";
 import type { CalendarItem, EventTypeMeta, MonthMeta } from "../utils/types";
 import { getMovieAnniversariesForYear } from "../lib/dateUtils";
+import { getAwardsForYear } from "./awards/transformAwards";
 
 // Export types
 export type { CalendarItem, EventTypeMeta, MonthMeta } from "../utils/types";
@@ -11,8 +12,8 @@ export type { CalendarItem, EventTypeMeta, MonthMeta } from "../utils/types";
 export const months = monthsJson as MonthMeta[];
 export const eventTypes = eventTypesJson as unknown as EventTypeMeta[];
 
-// Export all events
-export const allEvents = [...events, ...functionsData];
+// Export all data for the current year
+export const allEvents = [...events, ...functionsData, ...getAwardsForYear(new Date().getFullYear())];
 
 // Export function to get events by month
 export const getEventsByMonth = (year: number, month: number) => {
@@ -37,7 +38,8 @@ export const getCalendarItemsForYear = (year: number): CalendarItem[] => {
     return itemYear === year;
   });
 
+  const awardsForYear = getAwardsForYear(year);
   const anniversaries = getMovieAnniversariesForYear(movies, year);
 
-  return [...eventsForYear, ...functionsForYear, ...anniversaries];
+  return [...eventsForYear, ...functionsForYear, ...awardsForYear, ...anniversaries];
 };
