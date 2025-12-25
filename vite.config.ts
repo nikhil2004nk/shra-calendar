@@ -5,7 +5,7 @@ import path from 'path';
 // https://vitejs.dev/config/
 export default defineConfig(({ command }) => {
   // For GitHub Pages deployment
-  const base = command === 'build' ? '/shra-calender/' : '/';
+  const base = command === 'build' ? '/shra-calendar/' : '/';
   return {
     plugins: [react()],
     base,

@@ -17,7 +17,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
     <section className="flex-1 flex flex-col items-center justify-center px-4 text-center">
        <div className="mb-4 sm:mb-6 w-48 h-48 sm:w-56 sm:h-56 md:w-64 md:h-64 lg:w-72 lg:h-72 xl:w-80 xl:h-80 mx-auto transform transition-all duration-300 hover:scale-105">
           <img 
-            src="/hero-1.png" 
+            src={`${import.meta.env.BASE_URL}hero-1.png`} 
             alt="Shraddha Kapoor" 
             className="w-full h-full object-contain drop-shadow-lg"
             loading="eager"
