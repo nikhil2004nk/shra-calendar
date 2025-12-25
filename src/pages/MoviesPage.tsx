@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import { movies } from "../data/movies";
 import { format, parseISO } from "date-fns";
 import { Dialog } from "@headlessui/react";
-import { XMarkIcon, FilmIcon, CalendarIcon, ClockIcon, UserGroupIcon, StarIcon, ChevronDownIcon, CheckIcon } from "@heroicons/react/24/outline";
+import { XMarkIcon, FilmIcon, CalendarIcon, ClockIcon, UserGroupIcon, StarIcon } from "@heroicons/react/24/outline";
 import { YearDropdown } from "../components/YearDropdown";
+import { MovieFilterDropdown } from "../components/MovieFilterDropdown";
 import "../styles/dropdown-styles.css";
-import { useRef, useEffect } from 'react';
 
 
 interface MoviesPageProps {
@@ -44,21 +44,9 @@ export const MoviesPage: React.FC<MoviesPageProps> = ({ onBack }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedYear, setSelectedYear] = useState<number | 'all'>('all');
   const [releaseFilter, setReleaseFilter] = useState<'all' | 'released' | 'upcoming'>('all');
-  const [isReleaseFilterOpen, setIsReleaseFilterOpen] = useState(false);
-  const releaseFilterRef = useRef<HTMLDivElement>(null);
   const currentDate = new Date();
 
-  // Close dropdown when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (releaseFilterRef.current && !releaseFilterRef.current.contains(event.target as Node)) {
-        setIsReleaseFilterOpen(false);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
+  // Click outside handler removed as it's now handled by the MovieFilterDropdown component
   
   // Helper function to safely parse and format dates
   const processMovieDate = (dateString: string) => {
@@ -233,24 +221,9 @@ if (releaseFilter === 'released') {
       <div className="max-w-4xl mx-auto">
         <button
           onClick={onBack}
-          className="group mb-8 text-pink-400 hover:text-pink-300 flex items-center gap-2 transition-all duration-200 hover:gap-3"
+          className="text-xs text-slate-400 hover:text-slate-200 mb-8 inline-block"
         >
-          <svg 
-            xmlns="http://www.w3.org/2000/svg" 
-            width="18" 
-            height="18" 
-            viewBox="0 0 24 24" 
-            fill="none" 
-            stroke="currentColor" 
-            strokeWidth="2" 
-            strokeLinecap="round" 
-            strokeLinejoin="round"
-            className="transform group-hover:-translate-x-1 transition-transform"
-          >
-            <line x1="19" y1="12" x2="5" y2="12"></line>
-            <polyline points="12 19 5 12 12 5"></polyline>
-          </svg>
-          <span className="font-medium">Back to Home</span>
+          ← Back to home
         </button>
         
         <div className="text-center mb-10">
@@ -261,44 +234,45 @@ if (releaseFilter === 'released') {
         </div>
         
         {/* Search and Filter Section */}
-        <div className="mb-8 space-y-4">
-          <div className="flex flex-col md:flex-row gap-4">
-            {/* Search Bar */}
-            <div className="flex-1 relative">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <svg 
-                  className="h-5 w-5 text-slate-400" 
-                  fill="none" 
-                  viewBox="0 0 24 24" 
-                  stroke="currentColor"
-                >
-                  <path 
-                    strokeLinecap="round" 
-                    strokeLinejoin="round" 
-                    strokeWidth={2} 
-                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" 
-                  />
-                </svg>
-              </div>
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search movies by title, cast, character, or month..."
-                className="w-full pl-10 pr-4 py-3 bg-slate-800 border border-slate-700 rounded-xl text-slate-200 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all duration-200"
-              />
-              {searchQuery && (
-                <button
-                  onClick={() => setSearchQuery('')}
-                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-white"
-                >
-                  <XMarkIcon className="h-5 w-5" />
-                </button>
-              )}
+        <div className="mb-8 space-y-3">
+          {/* Search Bar - Full Width */}
+          <div className="relative">
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <svg 
+                className="h-5 w-5 text-slate-400" 
+                fill="none" 
+                viewBox="0 0 24 24" 
+                stroke="currentColor"
+              >
+                <path 
+                  strokeLinecap="round" 
+                  strokeLinejoin="round" 
+                  strokeWidth={2} 
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" 
+                />
+              </svg>
             </div>
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search movies by title, cast, character, or month..."
+              className="w-full pl-10 pr-4 py-3 bg-slate-800 border border-slate-700 rounded-xl text-slate-200 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all duration-200"
+            />
+            {searchQuery && (
+              <button
+                onClick={() => setSearchQuery('')}
+                className="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-white"
+              >
+                <XMarkIcon className="h-5 w-5" />
+              </button>
+            )}
+          </div>
 
+          {/* Filters Row */}
+          <div className="flex flex-wrap gap-3">
             {/* Year Filter */}
-            <div className="w-full sm:w-48">
+            <div className="flex-1 min-w-[120px]">
               <YearDropdown
                 years={availableYears}
                 selectedYear={selectedYear}
@@ -307,47 +281,11 @@ if (releaseFilter === 'released') {
             </div>
 
             {/* Release Status Filter */}
-            <div className="relative w-48" ref={releaseFilterRef}>
-              <button
-                type="button"
-                onClick={() => setIsReleaseFilterOpen(!isReleaseFilterOpen)}
-                className="w-full flex items-center justify-between px-4 py-3 text-left bg-slate-800 border border-slate-700 rounded-xl text-slate-200 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all duration-200 hover:border-slate-600"
-              >
-                <span>{
-                  releaseFilter === 'all' ? 'All Movies' :
-                  releaseFilter === 'released' ? 'Already Released' : 'Upcoming'
-                }</span>
-                <ChevronDownIcon 
-                  className={`h-5 w-5 text-slate-400 transition-transform duration-200 ${isReleaseFilterOpen ? 'transform rotate-180' : ''}`} 
-                  aria-hidden="true" 
-                />
-              </button>
-
-              {isReleaseFilterOpen && (
-                <div className="absolute z-10 mt-1 w-full bg-slate-800 border border-slate-700 rounded-xl shadow-lg overflow-hidden animate-dropdown">
-                  <div className="max-h-60 overflow-y-auto custom-scrollbar">
-                    {[
-                      { value: 'all', label: 'All Movies' },
-                      { value: 'released', label: 'Already Released' },
-                      { value: 'upcoming', label: 'Upcoming' }
-                    ].map((option) => (
-                      <button
-                        key={option.value}
-                        onClick={() => {
-                          setReleaseFilter(option.value as 'all' | 'released' | 'upcoming');
-                          setIsReleaseFilterOpen(false);
-                        }}
-                        className={`w-full px-4 py-2 text-left hover:bg-slate-700/50 flex items-center justify-between ${
-                          releaseFilter === option.value ? 'bg-pink-900/50 text-pink-300' : 'text-slate-200'
-                        }`}
-                      >
-                        <span>{option.label}</span>
-                        {releaseFilter === option.value && <CheckIcon className="h-4 w-4 text-pink-400" />}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              )}
+            <div className="flex-1 min-w-[140px]">
+              <MovieFilterDropdown
+                selectedFilter={releaseFilter}
+                onFilterChange={setReleaseFilter}
+              />
             </div>
           </div>
 
