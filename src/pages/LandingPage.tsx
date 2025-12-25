@@ -20,7 +20,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
           <img 
             src={`${import.meta.env.BASE_URL}hero-1.png`} 
             alt="Shraddha Kapoor" 
-            className="w-full h-full object-contain drop-shadow-lg"
+            className="w-full h-full object-contain drop-shadow-lg brightness-110"
             loading="eager"
           />
         </div>
