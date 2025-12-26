@@ -3,9 +3,9 @@ import react from '@vitejs/plugin-react';
 import path from 'path';
 
 // https://vitejs.dev/config/
-export default defineConfig(({ command }) => {
-  // For GitHub Pages deployment
-  const base = command === 'build' ? '/shra-calendar/' : '/';
+export default defineConfig(({ command, mode }) => {
+  // For GitHub Pages deployment - always use base path for production builds
+  const base = (command === 'build' || mode === 'production') ? '/shra-calendar/' : '/';
   return {
     plugins: [react()],
     base,
