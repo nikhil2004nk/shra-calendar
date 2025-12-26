@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import { getCalendarItemsForYear, months } from "../data";
 import { groupEventsByDate } from "../utils/dateUtils";
 import { MonthCalendar } from "../components/calendar/MonthCalendar";
@@ -13,6 +13,8 @@ interface MonthlyViewPageProps {
   onBackToSelection?: () => void;
   onBackToLanding: () => void;
   onMonthChange: (newMonthId: number) => void;
+  initialDate?: string | null; // Date to open modal for when component mounts
+  onInitialDateHandled?: () => void; // Callback to clear initialDate after modal opens
 }
 
 export const MonthlyViewPage: React.FC<MonthlyViewPageProps> = ({
@@ -21,7 +23,9 @@ export const MonthlyViewPage: React.FC<MonthlyViewPageProps> = ({
   mode,
   onBackToSelection,
   onBackToLanding,
-  onMonthChange
+  onMonthChange,
+  initialDate,
+  onInitialDateHandled
 }) => {
   const monthMeta = months.find((m) => m.id === monthId);
   const allItems = useMemo(
@@ -40,6 +44,41 @@ export const MonthlyViewPage: React.FC<MonthlyViewPageProps> = ({
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [selectedEvents, setSelectedEvents] = useState<Event[]>([]);
   const [showNoEvents, setShowNoEvents] = useState(false);
+
+  // Auto-open modal for initialDate when component mounts or initialDate changes
+  useEffect(() => {
+    if (initialDate) {
+      // Check if we have events for this date in the current month
+      if (eventsByDate[initialDate]) {
+        const eventsForDate = eventsByDate[initialDate];
+        if (eventsForDate && eventsForDate.length > 0) {
+          setSelectedDate(initialDate);
+          setSelectedEvents(eventsForDate);
+          setShowNoEvents(false);
+        } else {
+          setSelectedDate(initialDate);
+          setSelectedEvents([]);
+          setShowNoEvents(true);
+        }
+      } else {
+        // Date might be in a different month, try to get events from all items
+        const allEventsForDate = allItems.filter((item) => item.date === initialDate);
+        if (allEventsForDate.length > 0) {
+          setSelectedDate(initialDate);
+          setSelectedEvents(allEventsForDate);
+          setShowNoEvents(false);
+        } else {
+          setSelectedDate(initialDate);
+          setSelectedEvents([]);
+          setShowNoEvents(true);
+        }
+      }
+      // Notify parent that we've handled the initial date
+      if (onInitialDateHandled) {
+        onInitialDateHandled();
+      }
+    }
+  }, [initialDate, eventsByDate, allItems, onInitialDateHandled]);
 
   if (!monthMeta) return null;
 

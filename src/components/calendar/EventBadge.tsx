@@ -24,6 +24,8 @@ export const EventBadge: React.FC<EventBadgeProps> = ({ event }) => {
         return "bg-teal-100 text-teal-800";
       case "award-event":
         return "bg-yellow-100 text-yellow-800";
+      case "international-event":
+        return "bg-violet-100 text-violet-800";
       case "event":
       default:
         return "bg-blue-100 text-blue-800";

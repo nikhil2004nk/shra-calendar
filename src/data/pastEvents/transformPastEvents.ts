@@ -6,7 +6,7 @@ interface PastEventData {
   id: number;
   title: string;
   date: string;
-  type: "Film" | "Fashion" | "Cultural" | "Social" | "Awards" | "Event";
+  type: "Film" | "Fashion" | "Cultural" | "Social" | "Awards" | "Event" | "International Event";
   description: string;
   place: string;
 }
@@ -18,7 +18,8 @@ const typeMapping: Record<string, CalendarItemType> = {
   "Cultural": "cultural-event",
   "Social": "social-event",
   "Awards": "award-event",
-  "Event": "event"
+  "Event": "event",
+  "International Event": "international-event"
 };
 
 // Helper function to parse date parts

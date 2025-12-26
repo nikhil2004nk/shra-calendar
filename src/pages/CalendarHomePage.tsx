@@ -7,7 +7,7 @@ import { EventList } from "../components/events/EventList";
 
 interface CalendarHomePageProps {
   onBack: () => void;
-  onSelectMonth: (monthId: number) => void;
+  onSelectMonth: (monthId: number, date?: string) => void;
   year: number;
 }
 
@@ -57,6 +57,18 @@ export const CalendarHomePage: React.FC<CalendarHomePageProps> = ({
   // Get the month name from a date string
   const getMonthName = (dateString: string) => {
     return format(new Date(dateString), 'MMMM yyyy');
+  };
+
+  // Handle date click to navigate to calendar
+  const handleDateClick = (dateString: string) => {
+    const eventDate = new Date(dateString);
+    const eventMonth = eventDate.getMonth() + 1; // 1-12
+    const eventYear = eventDate.getFullYear();
+    
+    // If the event is in the current calendar year, navigate to that month with the date
+    if (eventYear === year) {
+      onSelectMonth(eventMonth, dateString);
+    }
   };
 
   return (
@@ -288,24 +300,25 @@ export const CalendarHomePage: React.FC<CalendarHomePageProps> = ({
 
         <button
           onClick={() => {
-            if (filters.types?.includes('event')) {
+            const hasEventFilter = filters.types?.includes('event') || filters.types?.includes('international-event');
+            if (hasEventFilter) {
               updateFilter('types', []);
             } else {
-              updateFilter('types', ['event']);
+              updateFilter('types', ['event', 'international-event']);
             }
           }}
           className={`text-left bg-gradient-to-r rounded-xl p-3 md:p-4 border shadow-lg transition-all duration-200 transform hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-opacity-50 ${
-            filters.types?.includes('event')
+            filters.types?.includes('event') || filters.types?.includes('international-event')
               ? 'from-blue-700/90 to-blue-600/80 border-blue-500/50 hover:border-blue-400/70 focus:ring-blue-500'
               : 'from-blue-900/80 to-blue-800/60 border-blue-800/50 hover:border-blue-400/50 focus:ring-blue-500'
           }`}
-          aria-label={filters.types?.includes('event') ? 'Clear events filter' : 'Filter by Events'}
+          aria-label={filters.types?.includes('event') || filters.types?.includes('international-event') ? 'Clear events filter' : 'Filter by Events'}
         >
           <div className="flex items-center justify-between">
             <div>
               <h3 className="text-xs md:text-sm font-medium text-blue-200">Events</h3>
               <p className="text-xl md:text-2xl font-bold text-white">
-                {allItems.filter(item => item.type === 'event').length}
+                {allItems.filter(item => item.type === 'event' || item.type === 'international-event').length}
               </p>
             </div>
             <div className="bg-blue-700/40 p-2 md:p-3 rounded-lg">
@@ -351,6 +364,7 @@ export const CalendarHomePage: React.FC<CalendarHomePageProps> = ({
                 title={monthYear}
                 className="mb-6"
                 showTitle={true}
+                onDateClick={handleDateClick}
               />
             </div>
           ))}

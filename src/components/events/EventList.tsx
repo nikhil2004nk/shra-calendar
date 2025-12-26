@@ -6,10 +6,18 @@ import { EventCard } from "./EventCard";
 interface EventPopupProps {
   event: Event | null;
   onClose: () => void;
+  onDateClick?: (date: string) => void;
 }
 
-const EventPopup: React.FC<EventPopupProps> = ({ event, onClose }) => {
+const EventPopup: React.FC<EventPopupProps> = ({ event, onClose, onDateClick }) => {
   if (!event) return null;
+
+  const handleDateClick = () => {
+    if (onDateClick) {
+      onDateClick(event.date);
+      onClose();
+    }
+  };
 
   return (
     <div 
@@ -37,7 +45,12 @@ const EventPopup: React.FC<EventPopupProps> = ({ event, onClose }) => {
             {event.title2 && <p className="text-slate-300 text-sm sm:text-base">{event.title2}</p>}
           </div>
           
-          <div className="flex items-center space-x-2 text-slate-300 text-sm sm:text-base bg-slate-900/30 px-3 py-2 rounded-lg border border-slate-700/50">
+          <div 
+            onClick={onDateClick ? handleDateClick : undefined}
+            className={`flex items-center space-x-2 text-slate-300 text-sm sm:text-base bg-slate-900/30 px-3 py-2 rounded-lg border border-slate-700/50 ${
+              onDateClick ? 'cursor-pointer hover:bg-slate-900/50 hover:text-white transition-colors' : ''
+            }`}
+          >
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
             </svg>
@@ -75,13 +88,15 @@ interface EventListProps {
   title?: string;
   className?: string;
   showTitle?: boolean;
+  onDateClick?: (date: string) => void;
 }
 
 export const EventList: React.FC<EventListProps> = ({ 
   events, 
   title, 
   className = '',
-  showTitle = true 
+  showTitle = true,
+  onDateClick
 }) => {
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
 
@@ -110,7 +125,8 @@ export const EventList: React.FC<EventListProps> = ({
       
       <EventPopup 
         event={selectedEvent} 
-        onClose={() => setSelectedEvent(null)} 
+        onClose={() => setSelectedEvent(null)}
+        onDateClick={onDateClick}
       />
     </>
   );

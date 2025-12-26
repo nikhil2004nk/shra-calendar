@@ -29,6 +29,7 @@ function App() {
   const [calendarYear] = useState<number>(2026);
   const [view, setView] = useState<View>("landing");
   const [selectedMonth, setSelectedMonth] = useState<number>(currentMonth);
+  const [targetDate, setTargetDate] = useState<string | null>(null); // Date to open modal for
 
   const monthMeta = useMemo(
     () => months.find((m) => m.id === selectedMonth),
@@ -62,8 +63,9 @@ function App() {
       <CalendarHomePage
         year={calendarYear}
         onBack={() => setView("landing")}
-        onSelectMonth={(monthId) => {
+        onSelectMonth={(monthId, date) => {
           setSelectedMonth(monthId);
+          setTargetDate(date || null);
           setView("calendar-home-month");
         }}
       />
@@ -76,9 +78,20 @@ function App() {
         year={calendarYear}
         monthId={selectedMonth}
         mode="calendar-home"
-        onBackToSelection={() => setView("calendar-home")}
-        onBackToLanding={() => setView("landing")}
-        onMonthChange={(newMonthId) => setSelectedMonth(newMonthId)}
+        onBackToSelection={() => {
+          setTargetDate(null);
+          setView("calendar-home");
+        }}
+        onBackToLanding={() => {
+          setTargetDate(null);
+          setView("landing");
+        }}
+        onMonthChange={(newMonthId) => {
+          setSelectedMonth(newMonthId);
+          setTargetDate(null); // Clear target date when month changes
+        }}
+        initialDate={targetDate}
+        onInitialDateHandled={() => setTargetDate(null)} // Clear target date after modal opens
       />
     );
   }

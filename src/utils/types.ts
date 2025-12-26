@@ -8,7 +8,8 @@ export type CalendarItemType =
   | "fashion-event"
   | "cultural-event"
   | "social-event"
-  | "award-event";
+  | "award-event"
+  | "international-event";
 
 export interface MonthMeta {
   id: number;

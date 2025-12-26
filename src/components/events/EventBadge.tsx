@@ -80,6 +80,15 @@ export const EventBadge: React.FC<EventBadgeProps> = ({ event }) => {
           chipText: "text-white",
           label: "Award"
         };
+      case "international-event":
+        return {
+          bg: "bg-violet-500/15",
+          border: "border-violet-500/40",
+          text: "text-violet-100",
+          chipBg: "bg-violet-500/80",
+          chipText: "text-white",
+          label: "International"
+        };
       case "event":
       default:
         return {

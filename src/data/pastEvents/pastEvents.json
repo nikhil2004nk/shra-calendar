@@ -202,7 +202,7 @@
   {
     "id": 26,
     "title": "opening of Pandit Pandharinath Kolhapure Marg at JVPD, Juhu",
-    "date": "2017-12-26",
+    "date": "2017-03-28",
     "type": "Cultural",
     "description": "Inauguration of street named after Pandit Pandharinath Kolhapure in Juhu.",
     "place": "JUHU, MUMBAI"
@@ -622,5 +622,37 @@
     "type": "Fashion",
     "description": "Lakme Fashion Week Winter Festive collections launch.",
     "place": "MUMBAI"
+  },
+  {
+    "id": 79,
+    "date": "2024-12-09",
+    "title": "Attend In Conversation and Red Sea International Film Festival",
+    "type": "International Event",
+    "description": "Shraddha Kapoor attended the Red Sea International Film Festival in Jeddah, Saudi Arabia, participating in an In Conversation session and related festival events, including red-carpet appearances and interactions with international filmmakers and talent.",
+    "place": "Jeddah, Saudi Arabia"
+  },
+  {
+    "id": 80,
+    "date": "2025-01-18",
+    "title": "Attended Joy Awards",
+    "type": "International Event",
+    "description": "Shraddha Kapoor attended the Joy Awards 2025 in Riyadh, Saudi Arabia, where she presented the Joy Award for Favourite Levant Series to the team of the acclaimed series.",
+    "place": "Riyadh, Saudi Arabia"
+  },
+  {
+    "id": 81,
+    "date": "2025-12-07",
+    "title": "Visited museum in Saudi Arabia",
+    "type": "International Event",
+    "description": "Shraddha Kapoor visited a major cultural museum in Saudi Arabia, exploring exhibitions showcasing local heritage, contemporary art, and immersive installations as part of her trip around the Red Sea region.",
+    "place": "Saudi Arabia"
+  },
+  {
+    "id": 82,
+    "date": "2025-12-08",
+    "title": "Attended Formula 1 race in Saudi Arabia",
+    "type": "International Event",
+    "description": "Shraddha Kapoor attended a Formula 1 Grand Prix event in Saudi Arabia, experiencing race-day action at the high-speed circuit and engaging with the global motorsport atmosphere.",
+    "place": "Saudi Arabia"
   }
 ]

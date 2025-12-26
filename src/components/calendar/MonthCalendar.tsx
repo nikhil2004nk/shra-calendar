@@ -62,6 +62,13 @@ const getTypeConfig = (type: string) => {
         text: 'text-yellow-100',
         label: 'Award'
       };
+    case 'international-event':
+      return {
+        bg: 'bg-violet-500/15',
+        border: 'border-violet-500/40',
+        text: 'text-violet-100',
+        label: 'International'
+      };
     case 'event':
     default:
       return {
@@ -98,10 +105,14 @@ const MonthlySummary: React.FC<MonthlySummaryProps> = ({ eventsByDate, onEventCl
   const monthName = date.toLocaleString('default', { month: 'long' });
   const yearNum = date.getFullYear();
 
-  // Get unique event types
+  // Get unique event types (merge event and international-event)
   const eventTypes = useMemo(() => {
     const types = new Set<string>();
-    allEvents.forEach(event => types.add(event.type));
+    allEvents.forEach(event => {
+      // Merge international-event into event for display
+      const displayType = event.type === 'international-event' ? 'event' : event.type;
+      types.add(displayType);
+    });
     return Array.from(types).sort();
   }, [allEvents]);
 
@@ -111,7 +122,14 @@ const MonthlySummary: React.FC<MonthlySummaryProps> = ({ eventsByDate, onEventCl
     
     const filtered: Record<string, Event[]> = {};
     Object.entries(eventsByDate).forEach(([date, events]) => {
-      const filteredEvents = events.filter(event => event.type === selectedFilter);
+      // When filtering by "event", include both "event" and "international-event"
+      const filteredEvents = events.filter(event => {
+        if (selectedFilter === 'event') {
+          // Include both regular events and international events
+          return event.type === 'event' || event.type === 'international-event';
+        }
+        return event.type === selectedFilter;
+      });
       if (filteredEvents.length > 0) {
         filtered[date] = filteredEvents;
       }
@@ -121,6 +139,23 @@ const MonthlySummary: React.FC<MonthlySummaryProps> = ({ eventsByDate, onEventCl
 
   const filteredTotalEvents = Object.values(filteredEventsByDate).flat().length;
 
+  // Helper function to format type name for display
+  const getTypeDisplayName = (type: string): string => {
+    switch (type) {
+      case 'movie': return 'Movie';
+      case 'function': return 'Function';
+      case 'movie-anniversary': return 'Movie Anniversary';
+      case 'film-event': return 'Film Event';
+      case 'fashion-event': return 'Fashion Event';
+      case 'cultural-event': return 'Cultural Event';
+      case 'social-event': return 'Social Event';
+      case 'award-event': return 'Award Event';
+      case 'international-event':
+      case 'event': return 'Event';
+      default: return type;
+    }
+  };
+
   // Calculate summary statistics
   const summary = useMemo(() => {
     const eventsByType: Record<string, number> = {};
@@ -129,7 +164,9 @@ const MonthlySummary: React.FC<MonthlySummaryProps> = ({ eventsByDate, onEventCl
     weekdays.forEach(day => eventsByWeekday[day] = 0);
     
     allEvents.forEach(event => {
-      eventsByType[event.type] = (eventsByType[event.type] || 0) + 1;
+      // Merge "event" and "international-event" into a single "Event" category
+      const displayType = event.type === 'international-event' ? 'event' : event.type;
+      eventsByType[displayType] = (eventsByType[displayType] || 0) + 1;
       const dayOfWeek = new Date(event.date).getDay();
       eventsByWeekday[weekdays[dayOfWeek]]++;
     });
@@ -170,9 +207,20 @@ const MonthlySummary: React.FC<MonthlySummaryProps> = ({ eventsByDate, onEventCl
           <div className="mb-6">
             <h4 className="mb-3 text-sm font-medium text-slate-300">Events by Type</h4>
             <div className="space-y-2">
-              {Object.entries(summary.eventsByType).map(([type, count]) => (
-                <div key={type} className="flex items-center justify-between">
-                  <span className="text-sm text-slate-400">{type}</span>
+              {Object.entries(summary.eventsByType)
+                .sort(([a], [b]) => {
+                  // Sort "Event" to appear after other types
+                  if (a === 'event') return 1;
+                  if (b === 'event') return -1;
+                  return a.localeCompare(b);
+                })
+                .map(([type, count]) => (
+                <div 
+                  key={type} 
+                  onClick={() => setSelectedFilter(type)}
+                  className="flex items-center justify-between cursor-pointer hover:bg-slate-800/50 rounded-lg px-2 py-1.5 transition-colors"
+                >
+                  <span className="text-sm text-slate-400 hover:text-slate-200">{getTypeDisplayName(type)}</span>
                   <span className="text-sm font-medium text-slate-200">{count}</span>
                 </div>
               ))}
@@ -230,7 +278,10 @@ const MonthlySummary: React.FC<MonthlySummaryProps> = ({ eventsByDate, onEventCl
     </button>
     {eventTypes.map((type) => {
       const config = getTypeConfig(type);
-      const count = allEvents.filter(e => e.type === type).length;
+      // When counting "event", include both "event" and "international-event"
+      const count = type === 'event' 
+        ? allEvents.filter(e => e.type === 'event' || e.type === 'international-event').length
+        : allEvents.filter(e => e.type === type).length;
       return (
         <button
           key={type}

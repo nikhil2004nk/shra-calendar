@@ -55,6 +55,7 @@ export const EventDetailsModal: React.FC<EventDetailsModalProps> = ({
       case 'cultural-event': return 'from-indigo-500 to-indigo-600';
       case 'social-event': return 'from-teal-500 to-teal-600';
       case 'award-event': return 'from-yellow-500 to-yellow-600';
+      case 'international-event': return 'from-violet-500 to-violet-600';
       case 'event':
       default: return 'from-blue-500 to-blue-600';
     }
@@ -117,6 +118,13 @@ export const EventDetailsModal: React.FC<EventDetailsModalProps> = ({
           bg: 'bg-yellow-100',
           text: 'text-yellow-800',
           border: 'border-yellow-200'
+        };
+      case 'international-event':
+        return {
+          label: 'International',
+          bg: 'bg-violet-100',
+          text: 'text-violet-800',
+          border: 'border-violet-200'
         };
       case 'event':
       default:

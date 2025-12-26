@@ -52,5 +52,11 @@
     "label": "Award Event",
     "color": "bg-yellow-100 text-yellow-800",
     "textColor": "text-yellow-800"
+  },
+  {
+    "id": "international-event",
+    "label": "International Event",
+    "color": "bg-violet-100 text-violet-800",
+    "textColor": "text-violet-800"
   }
 ]
