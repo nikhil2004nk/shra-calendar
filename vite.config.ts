@@ -5,7 +5,10 @@ import path from 'path';
 // https://vitejs.dev/config/
 export default defineConfig(({ command, mode }) => {
   // For GitHub Pages deployment - always use base path for production builds
-  const base = (command === 'build' || mode === 'production') ? '/shra-calendar/' : '/';
+  // Can be overridden with VITE_BASE_URL environment variable
+  // IMPORTANT: This must match your GitHub repository name exactly: shra-calendar
+  const base = process.env.VITE_BASE_URL || 
+               (command === 'build' || mode === 'production' ? '/shra-calendar/' : '/');
   return {
     plugins: [react()],
     base,
