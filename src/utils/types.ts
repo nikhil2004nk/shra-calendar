@@ -3,7 +3,12 @@ export type CalendarItemType =
   | "event"
   | "function"
   | "movie-anniversary"
-  | "award";
+  | "award"
+  | "film-event"
+  | "fashion-event"
+  | "cultural-event"
+  | "social-event"
+  | "award-event";
 
 export interface MonthMeta {
   id: number;
@@ -46,6 +51,7 @@ export interface CalendarItem {
     baseMovieId?: string;
     anniversaryYears?: number;
     originalDate?: string; // Keep for backward compatibility
+    place?: string;
   };
 }
 

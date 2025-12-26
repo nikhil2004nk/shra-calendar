@@ -22,5 +22,35 @@
     "label": "Movie Anniversary",
     "color": "bg-amber-100 text-amber-800",
     "textColor": "text-amber-800"
+  },
+  {
+    "id": "film-event",
+    "label": "Film Event",
+    "color": "bg-red-100 text-red-800",
+    "textColor": "text-red-800"
+  },
+  {
+    "id": "fashion-event",
+    "label": "Fashion Event",
+    "color": "bg-pink-100 text-pink-800",
+    "textColor": "text-pink-800"
+  },
+  {
+    "id": "cultural-event",
+    "label": "Cultural Event",
+    "color": "bg-indigo-100 text-indigo-800",
+    "textColor": "text-indigo-800"
+  },
+  {
+    "id": "social-event",
+    "label": "Social Event",
+    "color": "bg-teal-100 text-teal-800",
+    "textColor": "text-teal-800"
+  },
+  {
+    "id": "award-event",
+    "label": "Award Event",
+    "color": "bg-yellow-100 text-yellow-800",
+    "textColor": "text-yellow-800"
   }
 ]

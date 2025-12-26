@@ -1,0 +1,626 @@
+[
+  {
+    "id": 1,
+    "title": "RED SEA INTERNATIONAL FILM FESTIVAL",
+    "date": "2024-12-10",
+    "type": "Film",
+    "description": "Fourth edition of Red Sea International Film Festival in Jeddah's Al-Balad, showcasing 120+ films from 81 countries focusing on Arab, Asian, African cinema.[web:4][web:5]",
+    "place": "AL-BALAD, JEDDHAH"
+  },
+  {
+    "id": 2,
+    "title": "MISHRU FASHION EVENT 2024",
+    "date": "2024-10-06",
+    "type": "Fashion",
+    "description": "Mishru by Swapna Anumolu's 'Resonance 2024-25' showcase at Embassy of Belgium, New Delhi with Shraddha Kapoor as showstopper featuring Indo-western fusion.[web:7][web:10]",
+    "place": "NEW DELHI"
+  },
+  {
+    "id": 3,
+    "title": "RAHUL MISHRA FASHION EVENT",
+    "date": "2023-08-03",
+    "type": "Fashion",
+    "description": "Rahul Mishra couture presentation with hand-embroidered nature and cosmic-inspired designs, showcasing traditional Indian crafts.[web:8][web:11]",
+    "place": "Unknown"
+  },
+  {
+    "id": 4,
+    "title": "THAMMA TRAILER LAUNCH",
+    "date": "2025-09-26",
+    "type": "Film",
+    "description": "High-profile trailer launch event for upcoming Bollywood film 'Thamma' attended by cast and industry celebrities.",
+    "place": "MUMBAI"
+  },
+  {
+    "id": 5,
+    "title": "Pandit Pandharinath birth anniversary",
+    "date": "2024-02-16",
+    "type": "Cultural",
+    "description": "Commemoration of Pandit Pandharinath Kolhapure's birth anniversary celebrating Marathi musical heritage.",
+    "place": "MUMBAI"
+  },
+  {
+    "id": 6,
+    "title": "Shilpa Shetty Diwali Bash",
+    "date": "2023-11-11",
+    "type": "Social",
+    "description": "Exclusive Diwali celebration hosted by actress Shilpa Shetty attended by Bollywood A-listers.",
+    "place": "MUMBAI"
+  },
+  {
+    "id": 7,
+    "title": "Jio Studio announcement of upcoming films",
+    "date": "2023-04-12",
+    "type": "Film",
+    "description": "Jio Studios slate announcement unveiling major upcoming Bollywood productions.",
+    "place": "MUMBAI"
+  },
+  {
+    "id": 8,
+    "title": "Nita Mukesh Ambani Cultural Centre",
+    "date": "2023-04-01",
+    "type": "Cultural",
+    "description": "Gala event at the newly opened Nita Mukesh Ambani Cultural Centre (NMACC) in Mumbai.",
+    "place": "MUMBAI"
+  },
+  {
+    "id": 9,
+    "title": "Inauguration of the NMACC",
+    "date": "2023-03-31",
+    "type": "Cultural",
+    "description": "Grand inauguration ceremony of Nita Mukesh Ambani Cultural Centre with performances and celebrity attendance.",
+    "place": "MUMBAI"
+  },
+  {
+    "id": 10,
+    "title": "TRAILER LAUNCH OF TJMM",
+    "date": "2023-01-23",
+    "type": "Film",
+    "description": "Grand trailer launch of romantic comedy 'Tu Jhoothi Main Makkaar' starring Ranbir Kapoor & Shraddha Kapoor.",
+    "place": "MUMBAI"
+  },
+  {
+    "id": 11,
+    "title": "Dahi Handi festival, THANE",
+    "date": "2022-08-19",
+    "type": "Cultural",
+    "description": "Traditional Dahi Handi festival celebration in Thane with Bollywood celebrity participation.",
+    "place": "THANE"
+  },
+  {
+    "id": 12,
+    "title": "FDCI x Lakme Fashion Week",
+    "date": "2021-10-09",
+    "type": "Fashion",
+    "description": "Collaborative FDCI x Lakme Fashion Week showcasing designer collections with celebrity showstoppers.",
+    "place": "MUMBAI"
+  },
+  {
+    "id": 13,
+    "title": "Lakme Fashion Week",
+    "date": "2020-02-15",
+    "type": "Fashion",
+    "description": "Prestigious Lakme Fashion Week featuring leading Indian designers and Bollywood celebrities.",
+    "place": "MUMBAI"
+  },
+  {
+    "id": 14,
+    "title": "Street Dancer 3D PROMOTION ON Tarak Mehta ka Ulta Chasma",
+    "date": "2020-01-16",
+    "type": "Film",
+    "description": "Promotional appearance on popular TV show 'Taarak Mehta Ka Ooltah Chashmah' for 'Street Dancer 3D'.",
+    "place": "MUMBAI"
+  },
+  {
+    "id": 15,
+    "title": "Street Dancer 3D film trailer launch",
+    "date": "2019-12-18",
+    "type": "Film",
+    "description": "Official trailer launch event for dance film 'Street Dancer 3D' starring Varun Dhawan & Shraddha Kapoor.",
+    "place": "MUMBAI"
+  },
+  {
+    "id": 16,
+    "title": "Amitabh Bachchan Diwali Bash",
+    "date": "2019-10-27",
+    "type": "Social",
+    "description": "Legendary Diwali party hosted by Amitabh Bachchan attended by Bollywood fraternity.",
+    "place": "MUMBAI"
+  },
+  {
+    "id": 17,
+    "title": "New brand ambassador The Body Shop",
+    "date": "2019-09-09",
+    "type": "Event",
+    "description": "Announcement and launch event as brand ambassador for The Body Shop beauty products.",
+    "place": "MUMBAI"
+  },
+  {
+    "id": 18,
+    "title": "Trailer launch Saaho in Mumbai",
+    "date": "2019-08-10",
+    "type": "Film",
+    "description": "Grand trailer launch of pan-India action film 'Saaho' starring Prabhas.",
+    "place": "MUMBAI"
+  },
+  {
+    "id": 19,
+    "title": "WEDDIND RESCEPTION OF SAKSHI BHATT",
+    "date": "2019-01-25",
+    "type": "Social",
+    "description": "Wedding reception celebration of Sakshi Bhatt attended by Bollywood celebrities.",
+    "place": "MUMBAI"
+  },
+  {
+    "id": 20,
+    "title": "Launch of their movie Batti Gul Meter Chalu",
+    "date": "2018-08-10",
+    "type": "Film",
+    "description": "Promotional launch event for social comedy 'Batti Gul Meter Chalu' starring Shahid Kapoor.",
+    "place": "MUMBAI"
+  },
+  {
+    "id": 21,
+    "title": "Launch of the MOVIE STREE",
+    "date": "2018-07-26",
+    "type": "Film",
+    "description": "Launch event for horror-comedy 'Stree' that became a major box office success.",
+    "place": "MUMBAI"
+  },
+  {
+    "id": 22,
+    "title": "Akash Ambanis Grand Engagement Bash",
+    "date": "2018-06-30",
+    "type": "Social",
+    "description": "Lavish engagement celebration of Akash Ambani with India's business and film elite.",
+    "place": "MUMBAI"
+  },
+  {
+    "id": 23,
+    "title": "19th International Indian Film Academy (IIFA)",
+    "date": "2018-06-24",
+    "type": "Awards",
+    "description": "19th IIFA Awards celebrating Indian cinema excellence held in Bangkok, Thailand.",
+    "place": "BANGKOK"
+  },
+  {
+    "id": 24,
+    "title": "Visited government school on the occasion of Children's Day",
+    "date": "2017-11-14",
+    "type": "Event",
+    "description": "Charity visit to government school celebrating Children's Day with students.",
+    "place": "MUMBAI"
+  },
+  {
+    "id": 25,
+    "title": "Blenders Pride Fashion Tour at Kingdom of Dreams",
+    "date": "2017-11-04",
+    "type": "Fashion",
+    "description": "Blenders Pride Fashion Tour showcase at Gurgram's Kingdom of Dreams.",
+    "place": "GURUGRAM"
+  },
+  {
+    "id": 26,
+    "title": "opening of Pandit Pandharinath Kolhapure Marg at JVPD, Juhu",
+    "date": "2017-03-28",
+    "type": "Cultural",
+    "description": "Inauguration of street named after Pandit Pandharinath Kolhapure in Juhu.",
+    "place": "JUHU, MUMBAI"
+  },
+  {
+    "id": 27,
+    "title": "HT Most Stylish Awards at Bandra",
+    "date": "2017-03-24",
+    "type": "Awards",
+    "description": "Hindustan Times Most Stylish Awards recognizing fashion excellence.",
+    "place": "BANDRA, MUMBAI"
+  },
+  {
+    "id": 28,
+    "title": "Lakme Fashion Week Winter Festive 2016",
+    "date": "2016-08-24",
+    "type": "Fashion",
+    "description": "Lakme Fashion Week Winter/Festive edition showcasing festive collections.",
+    "place": "MUMBAI"
+  },
+  {
+    "id": 29,
+    "title": "Hindustan Times Most Stylish Awards 2016",
+    "date": "2016-05-24",
+    "type": "Awards",
+    "description": "Hindustan Times Most Stylish Awards 2016 celebrating fashion icons.",
+    "place": "New Delhi"
+  },
+  {
+    "id": 30,
+    "title": "Engagement party OF Eshanka Wahi",
+    "date": "2016-01-31",
+    "type": "Social",
+    "description": "Intimate engagement celebration of television personality Eshanka Wahi.",
+    "place": "New Delhi"
+  },
+  {
+    "id": 31,
+    "title": "Launch of photographer Dabboo Ratnanis 2016",
+    "date": "2016-01-12",
+    "type": "Event",
+    "description": "Annual celebrity calendar launch by renowned photographer Dabboo Ratnani.",
+    "place": "MUMBAI"
+  },
+  {
+    "id": 32,
+    "title": "Lakme Fashion Week Winter/Festive 2015",
+    "date": "2015-08-28",
+    "type": "Fashion",
+    "description": "Lakme Fashion Week Winter/Festive collections preview.",
+    "place": "MUMBAI"
+  },
+  {
+    "id": 33,
+    "title": "wedding reception of Bollywood actor Shahid Kapoor",
+    "date": "2015-06-12",
+    "type": "Social",
+    "description": "Star-studded wedding reception of Shahid Kapoor and Mira Rajput.",
+    "place": "MUMBAI"
+  },
+  {
+    "id": 34,
+    "title": "HELLO MAZAGINE COVER LAUNCH",
+    "date": "2015-07-23",
+    "type": "Event",
+    "description": "Hello! Magazine cover feature launch event.",
+    "place": "MUMBAI"
+  },
+  {
+    "id": 35,
+    "title": "16th International Indian Film Academy (IIFA) Awards",
+    "date": "2015-06-07",
+    "type": "Awards",
+    "description": "16th IIFA Awards ceremony held in Kuala Lumpur, Malaysia.",
+    "place": "Kuala Lumpur"
+  },
+  {
+    "id": 36,
+    "title": "Shraddha Kapoor at Kangana Ranauts party for winning National award in Mumbai",
+    "date": "2015-05-04",
+    "type": "Social",
+    "description": "Celebration party for Kangana Ranaut's National Award win.",
+    "place": "MUMBAI"
+  },
+  {
+    "id": 37,
+    "title": "Colors Annual Party",
+    "date": "2015-04-18",
+    "type": "Social",
+    "description": "Colors TV channel annual achievement party.",
+    "place": "MUMBAI"
+  },
+  {
+    "id": 38,
+    "title": "Grazia Young Fashion Awards 2015",
+    "date": "2015-04-15",
+    "type": "Awards",
+    "description": "Grazia Young Fashion Awards recognizing emerging style icons.",
+    "place": "MUMBAI"
+  },
+  {
+    "id": 39,
+    "title": "THE Hindustan Times Mumbai's Most Stylish Awards 2015",
+    "date": "2015-03-26",
+    "type": "Awards",
+    "description": "HT Mumbai's Most Stylish Awards celebrating fashion trends.",
+    "place": "MUMBAI"
+  },
+  {
+    "id": 40,
+    "title": "Amazon India Fashion Week Autumn-Winter 2015",
+    "date": "2015-03-25",
+    "type": "Fashion",
+    "description": "Amazon India Fashion Week Autumn/Winter collections.",
+    "place": "MUMBAI"
+  },
+  {
+    "id": 41,
+    "title": "Lakme Fashion Week (LFW) summer/resort 2015",
+    "date": "2015-03-19",
+    "type": "Fashion",
+    "description": "Lakme Fashion Week Summer/Resort collections showcase.",
+    "place": "MUMBAI"
+  },
+  {
+    "id": 42,
+    "title": "Life OK Screen Awards 2015",
+    "date": "2015-01-14",
+    "type": "Awards",
+    "description": "Life OK Screen Awards celebrating television and film excellence.",
+    "place": "MUMBAI"
+  },
+  {
+    "id": 43,
+    "title": "Shraddha Kapoor attends the Arpita Khan and Aayush Sharma wedding reception",
+    "date": "2014-11-21",
+    "type": "Social",
+    "description": "Salman Khan family wedding reception of Arpita Khan & Aayush Sharma.",
+    "place": "MUMBAI"
+  },
+  {
+    "id": 44,
+    "title": "Shraddha Kapoor at Amitabh Bachchans diwali party",
+    "date": "2014-10-23",
+    "type": "Social",
+    "description": "Amitabh Bachchan's annual Diwali bash with Bollywood celebrities.",
+    "place": "MUMBAI"
+  },
+  {
+    "id": 45,
+    "title": "Shraddha Kapoor at Ekta Kapoors Diwali party",
+    "date": "2014-10-22",
+    "type": "Social",
+    "description": "Producer Ekta Kapoor's Diwali celebration.",
+    "place": "MUMBAI"
+  },
+  {
+    "id": 46,
+    "title": "BMW India Bridal Fashion Week",
+    "date": "2014-08-10",
+    "type": "Fashion",
+    "description": "BMW India Bridal Fashion Week showcasing wedding collections.",
+    "place": "New Delhi"
+  },
+  {
+    "id": 47,
+    "title": "sixth edition of BMW India Bridal Fashion Week",
+    "date": "2014-07-22",
+    "type": "Fashion",
+    "description": "6th edition BMW India Bridal Fashion Week designer showcase.",
+    "place": "New Delhi"
+  },
+  {
+    "id": 48,
+    "title": "India Couture Week 2014",
+    "date": "2014-07-18",
+    "type": "Fashion",
+    "description": "FDCI India Couture Week featuring haute couture collections.",
+    "place": "New Delhi"
+  },
+  {
+    "id": 49,
+    "title": "India International Jewellery Week 2014 (IIJW)",
+    "date": "2014-07-15",
+    "type": "Fashion",
+    "description": "India International Jewellery Week showcasing designer jewellery.",
+    "place": "MUMBAI"
+  },
+  {
+    "id": 50,
+    "title": "72nd Master Deenanath Mangeshkar Awards",
+    "date": "2014-04-24",
+    "type": "Awards",
+    "description": "Prestigious Master Deenanath Mangeshkar Awards for arts excellence.",
+    "place": "MUMBAI"
+  },
+  {
+    "id": 51,
+    "title": "Grazia Young Fashion Awards 2014 ceremony",
+    "date": "2014-04-13",
+    "type": "Awards",
+    "description": "Grazia Young Fashion Awards 2014 fashion ceremony.",
+    "place": "MUMBAI"
+  },
+  {
+    "id": 52,
+    "title": "Grazia Young Fashion Awards 2014 ceremony",
+    "date": "2014-01-18",
+    "type": "Awards",
+    "description": "Grazia Young Fashion Awards ceremony recognizing young style icons.",
+    "place": "MUMBAI"
+  },
+  {
+    "id": 53,
+    "title": "Renault Star Guild Awards ceremony",
+    "date": "2014-01-16",
+    "type": "Awards",
+    "description": "Star Guild Awards celebrating film industry achievements.",
+    "place": "MUMBAI"
+  },
+  {
+    "id": 54,
+    "title": "Idea Filmfare Awards 2013",
+    "date": "2014-01-15",
+    "type": "Awards",
+    "description": "59th Idea Filmfare Awards honoring Bollywood excellence.",
+    "place": "MUMBAI"
+  },
+  {
+    "id": 55,
+    "title": "Life Ok Screen Awards nomination party",
+    "date": "2014-01-07",
+    "type": "Awards",
+    "description": "Life OK Screen Awards nominations celebration party.",
+    "place": "MUMBAI"
+  },
+  {
+    "id": 56,
+    "title": "BIG Star Entertainment Awards ceremony",
+    "date": "2013-12-18",
+    "type": "Awards",
+    "description": "BIG Star Entertainment Awards popular choice awards.",
+    "place": "MUMBAI"
+  },
+  {
+    "id": 57,
+    "title": "India Resort Wear Fashion Week (IRFW)",
+    "date": "2013-12-12",
+    "type": "Fashion",
+    "description": "India Resort Wear Fashion Week luxury resort collections.",
+    "place": "MUMBAI"
+  },
+  {
+    "id": 58,
+    "title": "Shradha Kapoor during the wedding reception of Vishesh Bhatt",
+    "date": "2013-11-28",
+    "type": "Social",
+    "description": "Vishesh Bhatt wedding reception family celebration.",
+    "place": "MUMBAI"
+  },
+  {
+    "id": 59,
+    "title": "Hello Hall of Fame Awards 2013",
+    "date": "2013-11-24",
+    "type": "Awards",
+    "description": "Hello! Hall of Fame Awards 2013 celebrity honors.",
+    "place": "MUMBAI"
+  },
+  {
+    "id": 60,
+    "title": "SUCCESS party of Aashiqui 2",
+    "date": "2013-04-30",
+    "type": "Social",
+    "description": "Grand success celebration party for blockbuster 'Aashiqui 2'.",
+    "place": "MUMBAI"
+  },
+  {
+    "id": 61,
+    "title": "music launch of the film Aashiqui 2",
+    "date": "2013-04-08",
+    "type": "Film",
+    "description": "Music album launch event for romantic musical 'Aashiqui 2'.",
+    "place": "MUMBAI"
+  },
+  {
+    "id": 62,
+    "title": "premier of Bollywood movie Mai at Cinemax",
+    "date": "2013-01-31",
+    "type": "Film",
+    "description": "Special premiere screening of Bollywood film 'Mai' at Cinemax.",
+    "place": "MUMBAI"
+  },
+  {
+    "id": 63,
+    "title": "Mohit Suri and Udita Goswami's wedding ceremony at Iscon Temple",
+    "date": "2013-01-29",
+    "type": "Social",
+    "description": "Filmmaker Mohit Suri's wedding ceremony at ISKCON Temple.",
+    "place": "MUMBAI"
+  },
+  {
+    "id": 64,
+    "title": "MIJWAN FASHION SHOW",
+    "date": "2012-09-03",
+    "type": "Fashion",
+    "description": "Mijwan Welfare Society fashion show for women's empowerment.",
+    "place": "MUMBAI"
+  },
+  {
+    "id": 65,
+    "title": "wedding reception of Dhiraj Deshmukh and Deepshikha Bhagnani",
+    "date": "2012-02-28",
+    "type": "Social",
+    "description": "High-profile wedding reception of Dhiraj Deshmukh & Deepshikha Bhagnani.",
+    "place": "MUMBAI"
+  },
+  {
+    "id": 66,
+    "title": "Hello Hall of Fame Awards",
+    "date": "2011-11-09",
+    "type": "Awards",
+    "description": "Hello! Hall of Fame Awards recognizing entertainment excellence.",
+    "place": "MUMBAI"
+  },
+  {
+    "id": 67,
+    "title": "Sanjay Dutt's Mata Ki Chowki",
+    "date": "2011-10-03",
+    "type": "Social",
+    "description": "Religious pre-wedding ceremony for Sanjay Dutt's family.",
+    "place": "MUMBAI"
+  },
+  {
+    "id": 68,
+    "title": "GQ Men Of The Year Awards 2011",
+    "date": "2011-09-29",
+    "type": "Awards",
+    "description": "GQ Men of the Year Awards celebrating style and achievement.",
+    "place": "MUMBAI"
+  },
+  {
+    "id": 69,
+    "title": "Mausam' film premier show",
+    "date": "2011-09-22",
+    "type": "Film",
+    "description": "Grand premiere of Shahid Kapoor starrer romantic drama 'Mausam'.",
+    "place": "MUMBAI"
+  },
+  {
+    "id": 70,
+    "title": "Lakme Fashion Week winter/Festive 2011",
+    "date": "2011-08-19",
+    "type": "Fashion",
+    "description": "Lakme Fashion Week Winter/Festive collections showcase.",
+    "place": "MUMBAI"
+  },
+  {
+    "id": 71,
+    "title": "India International Jewellery Week (IIJW)",
+    "date": "2011-08-03",
+    "type": "Fashion",
+    "description": "India International Jewellery Week designer jewellery showcase.",
+    "place": "MUMBAI"
+  },
+  {
+    "id": 72,
+    "title": "Vogue Beauty Awards",
+    "date": "2011-07-28",
+    "type": "Awards",
+    "description": "Vogue Beauty Awards celebrating beauty industry excellence.",
+    "place": "MUMBAI"
+  },
+  {
+    "id": 73,
+    "title": "Delhi Couture Week 2011",
+    "date": "2011-07-25",
+    "type": "Fashion",
+    "description": "FDCI Delhi Couture Week haute couture showcase.",
+    "place": "New Delhi"
+  },
+  {
+    "id": 74,
+    "title": "'Taj Express' at NCPA",
+    "date": "2011-07-10",
+    "type": "Cultural",
+    "description": "Musical theatre production 'Taj Express' performance at NCPA.",
+    "place": "MUMBAI"
+  },
+  {
+    "id": 75,
+    "title": "Lakme Fashion Week Summer/ Resort 2011",
+    "date": "2011-03-15",
+    "type": "Fashion",
+    "description": "Lakme Fashion Week Summer/Resort collections preview.",
+    "place": "MUMBAI"
+  },
+  {
+    "id": 76,
+    "title": "Stardust Awards 2011",
+    "date": "2011-02-06",
+    "type": "Awards",
+    "description": "Stardust Awards celebrating film and television achievements.",
+    "place": "MUMBAI"
+  },
+  {
+    "id": 77,
+    "title": "56th Idea Filmfare Awards",
+    "date": "2011-01-29",
+    "type": "Awards",
+    "description": "56th Filmfare Awards - Bollywood's most prestigious awards.",
+    "place": "MUMBAI"
+  },
+  {
+    "id": 78,
+    "title": "Lakme Fashion Week Winter Festive 2010",
+    "date": "2010-09-21",
+    "type": "Fashion",
+    "description": "Lakme Fashion Week Winter Festive collections launch.",
+    "place": "MUMBAI"
+  }
+]

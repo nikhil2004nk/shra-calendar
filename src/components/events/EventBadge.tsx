@@ -35,6 +35,51 @@ export const EventBadge: React.FC<EventBadgeProps> = ({ event }) => {
           chipText: "text-white",
           label: "Anniversary"
         };
+      case "film-event":
+        return {
+          bg: "bg-red-500/15",
+          border: "border-red-500/40",
+          text: "text-red-100",
+          chipBg: "bg-red-500/80",
+          chipText: "text-white",
+          label: "Film"
+        };
+      case "fashion-event":
+        return {
+          bg: "bg-pink-500/15",
+          border: "border-pink-500/40",
+          text: "text-pink-100",
+          chipBg: "bg-pink-500/80",
+          chipText: "text-white",
+          label: "Fashion"
+        };
+      case "cultural-event":
+        return {
+          bg: "bg-indigo-500/15",
+          border: "border-indigo-500/40",
+          text: "text-indigo-100",
+          chipBg: "bg-indigo-500/80",
+          chipText: "text-white",
+          label: "Cultural"
+        };
+      case "social-event":
+        return {
+          bg: "bg-teal-500/15",
+          border: "border-teal-500/40",
+          text: "text-teal-100",
+          chipBg: "bg-teal-500/80",
+          chipText: "text-white",
+          label: "Social"
+        };
+      case "award-event":
+        return {
+          bg: "bg-yellow-500/15",
+          border: "border-yellow-500/40",
+          text: "text-yellow-100",
+          chipBg: "bg-yellow-500/80",
+          chipText: "text-white",
+          label: "Award"
+        };
       case "event":
       default:
         return {
@@ -68,7 +113,8 @@ export const EventBadge: React.FC<EventBadgeProps> = ({ event }) => {
 
   return (
     <div
-      className={`group relative flex items-start space-x-1 rounded-md p-1 text-left transition-colors ${cfg.bg} ${cfg.border} ${cfg.text} hover:opacity-90`}
+      className={`group relative flex items-start space-x-1 rounded-md p-1 text-left transition-all duration-200 ${cfg.bg} ${cfg.border} ${cfg.text} hover:opacity-100 hover:scale-[1.02] hover:shadow-md cursor-pointer`}
+      title={`Click to view details: ${displayTitle}`}
     >
       <div className="flex-1 min-w-0 max-w-[120px] sm:max-w-[140px]">
         <div className="flex items-center justify-between">

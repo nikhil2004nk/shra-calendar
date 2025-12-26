@@ -57,6 +57,11 @@ export const MonthlyViewPage: React.FC<MonthlyViewPageProps> = ({
     setSelectedEvents(events);
   };
 
+  const handleEventClick = (event: Event) => {
+    setSelectedDate(event.date);
+    setSelectedEvents([event]);
+  };
+
   return (
     <main className="min-h-screen bg-slate-950 text-slate-50 px-4 py-6 space-y-4">
       {/* Back buttons row */}
@@ -99,6 +104,7 @@ export const MonthlyViewPage: React.FC<MonthlyViewPageProps> = ({
         monthMeta={monthMeta}
         eventsByDate={eventsByDate}
         onDayClick={handleDayClick}
+        onEventClick={handleEventClick}
       />
 
       {selectedDate && selectedEvents.length > 0 && (

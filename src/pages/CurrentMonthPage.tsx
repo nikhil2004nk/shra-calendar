@@ -41,6 +41,11 @@ export const CurrentMonthPage: React.FC<CurrentMonthPageProps> = ({
     setSelectedEvents(events);
   };
 
+  const handleEventClick = (event: Event) => {
+    setSelectedDate(event.date);
+    setSelectedEvents([event]);
+  };
+
   const handleTodayClick = () => {
     const today = new Date();
     const todayYear = today.getFullYear();
@@ -83,6 +88,7 @@ export const CurrentMonthPage: React.FC<CurrentMonthPageProps> = ({
         monthMeta={monthMeta}
         eventsByDate={eventsByDate}
         onDayClick={handleDayClick}
+        onEventClick={handleEventClick}
         onTodayClick={handleTodayClick}
       />
 

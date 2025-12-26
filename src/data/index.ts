@@ -5,6 +5,7 @@ import { events, functionsData } from "./events";
 import type { CalendarItem, EventTypeMeta, MonthMeta } from "../utils/types";
 import { getMovieAnniversariesForYear } from "../lib/dateUtils";
 import { getAwardsForYear } from "./awards/transformAwards";
+import { getPastEventsForYear } from "./pastEvents/transformPastEvents";
 
 // Export types
 export type { CalendarItem, EventTypeMeta, MonthMeta } from "../utils/types";
@@ -26,6 +27,7 @@ export const getEventsByMonth = (year: number, month: number) => {
  * Build all calendar items for a given year:
  * - Static events/functions whose date year === year
  * - Movie anniversaries generated for that year
+ * - Past events reminders (film, fashion, cultural, social, award events)
  */
 export const getCalendarItemsForYear = (year: number): CalendarItem[] => {
   const eventsForYear = events.filter((item) => {
@@ -40,6 +42,7 @@ export const getCalendarItemsForYear = (year: number): CalendarItem[] => {
 
   const awardsForYear = getAwardsForYear(year);
   const anniversaries = getMovieAnniversariesForYear(movies, year);
+  const pastEventsForYear = getPastEventsForYear(year);
 
-  return [...eventsForYear, ...functionsForYear, ...awardsForYear, ...anniversaries];
+  return [...eventsForYear, ...functionsForYear, ...awardsForYear, ...anniversaries, ...pastEventsForYear];
 };

@@ -50,6 +50,11 @@ export const EventDetailsModal: React.FC<EventDetailsModalProps> = ({
       case 'movie': return 'from-purple-600 to-purple-700';
       case 'function': return 'from-emerald-500 to-emerald-600';
       case 'movie-anniversary': return 'from-amber-500 to-amber-600';
+      case 'film-event': return 'from-red-500 to-red-600';
+      case 'fashion-event': return 'from-pink-500 to-pink-600';
+      case 'cultural-event': return 'from-indigo-500 to-indigo-600';
+      case 'social-event': return 'from-teal-500 to-teal-600';
+      case 'award-event': return 'from-yellow-500 to-yellow-600';
       case 'event':
       default: return 'from-blue-500 to-blue-600';
     }
@@ -141,6 +146,14 @@ export const EventDetailsModal: React.FC<EventDetailsModalProps> = ({
                           {formatDisplayDate(event.originalDate || event.date)}
                         </p>
                       </div>
+                      {event.meta?.place && (
+                        <div className="p-2 sm:p-0">
+                          <p className="text-gray-500">Location</p>
+                          <p className="font-medium text-gray-800">
+                            {event.meta.place}
+                          </p>
+                        </div>
+                      )}
                       {event.meta?.anniversaryYears && (
                         <div className="bg-yellow-50 p-2 sm:p-3 rounded-lg border-l-4 border-yellow-400 sm:col-span-2 lg:col-span-1">
                           <p className="text-yellow-700 font-medium text-sm sm:text-base">
@@ -174,6 +187,14 @@ export const EventDetailsModal: React.FC<EventDetailsModalProps> = ({
                         {formatDisplayDate(event.originalDate || event.date)}
                       </p>
                     </div>
+                    {event.meta?.place && (
+                      <div className="p-2 sm:p-0">
+                        <p className="text-gray-500">Location</p>
+                        <p className="font-medium text-gray-800">
+                          {event.meta.place}
+                        </p>
+                      </div>
+                    )}
                     {event.meta?.anniversaryYears && (
                       <div className="bg-yellow-50 p-2 sm:p-3 rounded-lg border-l-4 border-yellow-400 sm:col-span-2 lg:col-span-1">
                         <p className="text-yellow-700 font-medium text-sm sm:text-base">

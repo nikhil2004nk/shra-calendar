@@ -222,6 +222,7 @@ interface MonthCalendarProps {
   monthMeta: MonthMeta;
   eventsByDate: Record<string, Event[]>;
   onDayClick?: (date: string, events: Event[]) => void;
+  onEventClick?: (event: Event) => void;
   onTodayClick?: () => void;
   className?: string;
 }
@@ -231,11 +232,15 @@ export const MonthCalendar: React.FC<MonthCalendarProps> = ({
   monthMeta,
   eventsByDate,
   onDayClick,
+  onEventClick,
   onTodayClick,
   className,
 }) => {
   const handleEventClick = (event: Event) => {
-    if (onDayClick) {
+    if (onEventClick) {
+      onEventClick(event);
+    } else if (onDayClick) {
+      // Fallback to day click if no event click handler
       onDayClick(event.date, [event]);
     }
   };
@@ -337,16 +342,17 @@ export const MonthCalendar: React.FC<MonthCalendarProps> = ({
               <div 
                 key={dateKey} 
                 className={cn(
-                  "group relative min-h-[4rem] bg-slate-900/50 transition-all duration-200 sm:min-h-[7rem] hover:bg-slate-800/50",
-                  eventsForDay.length > 0 ? "cursor-pointer hover:bg-slate-800/50" : ""
+                  "group relative min-h-[4rem] bg-slate-900/50 transition-all duration-200 sm:min-h-[7rem]",
+                  eventsForDay.length > 0 ? "hover:bg-slate-800/50" : ""
                 )}
-                onClick={() => eventsForDay.length > 0 && onDayClick?.(dateKey, eventsForDay)}
               >
                 <DayCell
                   day={day}
                   isToday={isToday}
                   isCurrentMonth={true}
                   events={eventsForDay}
+                  onClick={() => eventsForDay.length > 0 && onDayClick?.(dateKey, eventsForDay)}
+                  onEventClick={(event) => handleEventClick(event)}
                 />
               </div>
             );
