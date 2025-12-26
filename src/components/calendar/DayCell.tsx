@@ -21,8 +21,8 @@ export const DayCell: React.FC<DayCellProps> = ({
   onEventClick
 }) => {
   const hasEvents = events.length > 0;
-  const visibleEvents = events.slice(0, 2);
-  const hasMore = events.length > 2;
+  const visibleEvents = events; // Show all events
+  const hasMore = false; // No longer needed since we show all events
   
   const dayNumberClasses = cn(
     "flex h-6 w-6 items-center justify-center rounded-full text-sm font-medium transition-colors cursor-pointer",
@@ -97,18 +97,6 @@ export const DayCell: React.FC<DayCellProps> = ({
               <EventBadge event={event} />
             </div>
           ))}
-          {hasMore && (
-            <div 
-              className="text-[10px] text-slate-400 font-medium px-1 py-0.5 bg-slate-800/40 rounded cursor-pointer hover:bg-slate-700/60 transition-colors"
-              onClick={(e) => {
-                e.stopPropagation();
-                onClick?.(e);
-              }}
-              title={`Click to view all ${events.length} events`}
-            >
-              +{events.length - 2} more
-            </div>
-          )}
         </div>
       </div>
     </div>

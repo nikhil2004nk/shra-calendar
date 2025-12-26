@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import type { Event, MonthMeta } from "../../utils/types";
 import { buildDateKey, cn } from "../../utils";
 import { DayCell } from "./DayCell";
@@ -27,6 +27,41 @@ const getTypeConfig = (type: string) => {
         text: 'text-amber-50',
         label: 'Anniversary'
       };
+    case 'film-event':
+      return {
+        bg: 'bg-red-500/15',
+        border: 'border-red-500/40',
+        text: 'text-red-100',
+        label: 'Film'
+      };
+    case 'fashion-event':
+      return {
+        bg: 'bg-pink-500/15',
+        border: 'border-pink-500/40',
+        text: 'text-pink-100',
+        label: 'Fashion'
+      };
+    case 'cultural-event':
+      return {
+        bg: 'bg-indigo-500/15',
+        border: 'border-indigo-500/40',
+        text: 'text-indigo-100',
+        label: 'Cultural'
+      };
+    case 'social-event':
+      return {
+        bg: 'bg-teal-500/15',
+        border: 'border-teal-500/40',
+        text: 'text-teal-100',
+        label: 'Social'
+      };
+    case 'award-event':
+      return {
+        bg: 'bg-yellow-500/15',
+        border: 'border-yellow-500/40',
+        text: 'text-yellow-100',
+        label: 'Award'
+      };
     case 'event':
     default:
       return {
@@ -47,6 +82,7 @@ const MonthlySummary: React.FC<MonthlySummaryProps> = ({ eventsByDate, onEventCl
   const currentDate = new Date();
   const allEvents = Object.values(eventsByDate).flat();
   const totalEvents = allEvents.length;
+  const [selectedFilter, setSelectedFilter] = useState<string | null>(null);
 
   if (totalEvents === 0) {
     return (
@@ -61,6 +97,29 @@ const MonthlySummary: React.FC<MonthlySummaryProps> = ({ eventsByDate, onEventCl
   const date = new Date(firstEventDate);
   const monthName = date.toLocaleString('default', { month: 'long' });
   const yearNum = date.getFullYear();
+
+  // Get unique event types
+  const eventTypes = useMemo(() => {
+    const types = new Set<string>();
+    allEvents.forEach(event => types.add(event.type));
+    return Array.from(types).sort();
+  }, [allEvents]);
+
+  // Filter events by selected type
+  const filteredEventsByDate = useMemo(() => {
+    if (!selectedFilter) return eventsByDate;
+    
+    const filtered: Record<string, Event[]> = {};
+    Object.entries(eventsByDate).forEach(([date, events]) => {
+      const filteredEvents = events.filter(event => event.type === selectedFilter);
+      if (filteredEvents.length > 0) {
+        filtered[date] = filteredEvents;
+      }
+    });
+    return filtered;
+  }, [eventsByDate, selectedFilter]);
+
+  const filteredTotalEvents = Object.values(filteredEventsByDate).flat().length;
 
   // Calculate summary statistics
   const summary = useMemo(() => {
@@ -152,65 +211,190 @@ const MonthlySummary: React.FC<MonthlySummaryProps> = ({ eventsByDate, onEventCl
 
      {/* Event List Section */}
 <div className="rounded-xl border border-slate-800 bg-slate-900/80 p-6">
-  <h3 className="mb-6 text-xl font-semibold text-white">
-    All events in {monthName} {yearNum} ({totalEvents})
+  <h3 className="mb-4 text-xl font-semibold text-white">
+    All events in {monthName} {yearNum} ({filteredTotalEvents})
   </h3>
   
-  <div className="space-y-4">
-    {Object.entries(eventsByDate)
+  {/* Filter Tabs */}
+  <div className="mb-6 flex flex-wrap gap-2 border-b border-slate-700/50 pb-4">
+    <button
+      onClick={() => setSelectedFilter(null)}
+      className={cn(
+        "px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200",
+        !selectedFilter
+          ? "bg-blue-600 text-white shadow-lg shadow-blue-600/20"
+          : "bg-slate-800/50 text-slate-300 hover:bg-slate-700/50 hover:text-white"
+      )}
+    >
+      All ({totalEvents})
+    </button>
+    {eventTypes.map((type) => {
+      const config = getTypeConfig(type);
+      const count = allEvents.filter(e => e.type === type).length;
+      return (
+        <button
+          key={type}
+          onClick={() => setSelectedFilter(type)}
+          className={cn(
+            "px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 border",
+            selectedFilter === type
+              ? `${config.bg} ${config.border} ${config.text} shadow-lg`
+              : "bg-slate-800/50 border-slate-700/50 text-slate-300 hover:bg-slate-700/50 hover:text-white hover:border-slate-600"
+          )}
+        >
+          {config.label} ({count})
+        </button>
+      );
+    })}
+  </div>
+  
+  <div className="max-h-[600px] overflow-y-auto pr-2 custom-scrollbar">
+    <div className="space-y-6">
+    {Object.entries(filteredEventsByDate)
       .sort(([dateA], [dateB]) => new Date(dateA).getTime() - new Date(dateB).getTime())
-      .map(([date, events]) => (
-        <div key={date} className="space-y-3">
-          {events.map((event, index) => (
-            <div 
-              key={`${date}-${index}`} 
-              className="rounded-lg bg-slate-800/50 p-5 hover:bg-slate-800/70 transition-colors cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-slate-900"
-              onClick={() => onEventClick?.(event)}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                  e.preventDefault();
-                  onEventClick?.(event);
-                }
-              }}
-              tabIndex={0}
-              role="button"
-              aria-label={`View details for ${event.title}`}
-            >
-              <div className="flex flex-wrap items-center gap-2 mb-2">
-                {(() => {
-                  const config = getTypeConfig(event.type);
-                  return (
-                    <span 
-                      className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-medium ${config.bg} ${config.border} ${config.text}`}
-                    >
-                      {config.label}
-                    </span>
-                  );
-                })()}
-                <span className="text-xs text-slate-400">
-                  {new Date(date).toLocaleDateString('en-US', { 
-                    year: 'numeric', 
-                    month: 'short', 
-                    day: 'numeric' 
-                  })}
-                </span>
+      .map(([date, events]) => {
+        const eventDate = new Date(date);
+        const isToday = 
+          eventDate.getDate() === currentDate.getDate() &&
+          eventDate.getMonth() === currentDate.getMonth() &&
+          eventDate.getFullYear() === currentDate.getFullYear();
+        const dayName = eventDate.toLocaleDateString('en-US', { weekday: 'long' });
+        const dateFormatted = eventDate.toLocaleDateString('en-US', { 
+          month: 'short', 
+          day: 'numeric',
+          year: 'numeric'
+        });
+        
+        return (
+          <div key={date} className="space-y-3">
+            {/* Date Header */}
+            <div className={`flex items-center gap-3 pb-2 border-b ${isToday ? 'border-blue-500/50' : 'border-slate-700/50'}`}>
+              <div className={`flex items-center gap-2 ${isToday ? 'text-blue-400' : 'text-slate-300'}`}>
+                <svg 
+                  className="w-4 h-4" 
+                  fill="none" 
+                  stroke="currentColor" 
+                  viewBox="0 0 24 24"
+                >
+                  <path 
+                    strokeLinecap="round" 
+                    strokeLinejoin="round" 
+                    strokeWidth={2} 
+                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" 
+                  />
+                </svg>
+                <span className="font-semibold text-sm">{dayName}</span>
+                <span className="text-sm">{dateFormatted}</span>
+                {isToday && (
+                  <span className="ml-2 px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-400 text-xs font-medium">
+                    Today
+                  </span>
+                )}
               </div>
-              
-              <h4 className="text-lg font-semibold text-white">{event.title}</h4>
-              
-              {event.title2 && (
-                <p className="mt-1 text-sm text-slate-300">{event.title2}</p>
-              )}
-              
-              {event.description && (
-                <div className="mt-3 pt-3 border-t border-slate-700">
-                  <p className="text-sm text-slate-300">{event.description}</p>
-                </div>
-              )}
+              <div className="flex-1"></div>
+              <span className="text-xs text-slate-500 font-medium">
+                {events.length} {events.length === 1 ? 'event' : 'events'}
+              </span>
             </div>
-          ))}
-        </div>
-      ))}
+            
+            {/* Events for this date */}
+            <div className="space-y-2 pl-2">
+              {events.map((event, index) => {
+                const config = getTypeConfig(event.type);
+                return (
+                  <div 
+                    key={`${date}-${index}`} 
+                    className={`group rounded-lg border ${config.border} ${config.bg} p-4 hover:${config.border.replace('/40', '/60')} hover:shadow-lg transition-all duration-200 cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-slate-900`}
+                    onClick={() => onEventClick?.(event)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        onEventClick?.(event);
+                      }
+                    }}
+                    tabIndex={0}
+                    role="button"
+                    aria-label={`View details for ${event.title}`}
+                  >
+                    <div className="flex items-start gap-3">
+                      {/* Event Type Badge */}
+                      <div className="flex-shrink-0">
+                        <span 
+                          className={`inline-flex items-center rounded-full border px-3 py-1 text-xs font-semibold ${config.bg} ${config.border} ${config.text}`}
+                        >
+                          {config.label}
+                        </span>
+                      </div>
+                      
+                      {/* Event Content */}
+                      <div className="flex-1 min-w-0">
+                        <h4 className={`text-base font-semibold ${config.text} group-hover:text-white transition-colors`}>
+                          {event.title}
+                        </h4>
+                        
+                        {event.title2 && (
+                          <p className="mt-1 text-sm text-slate-400 group-hover:text-slate-300 transition-colors">
+                            {event.title2}
+                          </p>
+                        )}
+                        
+                        {event.description && (
+                          <p className="mt-2 text-sm text-slate-400 line-clamp-2 group-hover:text-slate-300 transition-colors">
+                            {event.description}
+                          </p>
+                        )}
+                        
+                        {event.meta?.place && (
+                          <div className="mt-2 flex items-center gap-1.5 text-xs text-slate-500">
+                            <svg 
+                              className="w-3.5 h-3.5" 
+                              fill="none" 
+                              stroke="currentColor" 
+                              viewBox="0 0 24 24"
+                            >
+                              <path 
+                                strokeLinecap="round" 
+                                strokeLinejoin="round" 
+                                strokeWidth={2} 
+                                d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" 
+                              />
+                              <path 
+                                strokeLinecap="round" 
+                                strokeLinejoin="round" 
+                                strokeWidth={2} 
+                                d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" 
+                              />
+                            </svg>
+                            <span>{event.meta.place}</span>
+                          </div>
+                        )}
+                      </div>
+                      
+                      {/* Click indicator */}
+                      <div className="flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <svg 
+                          className="w-5 h-5 text-slate-400" 
+                          fill="none" 
+                          stroke="currentColor" 
+                          viewBox="0 0 24 24"
+                        >
+                          <path 
+                            strokeLinecap="round" 
+                            strokeLinejoin="round" 
+                            strokeWidth={2} 
+                            d="M9 5l7 7-7 7" 
+                          />
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        );
+      })}
+    </div>
   </div>
 </div>
     </div>
@@ -223,7 +407,7 @@ interface MonthCalendarProps {
   eventsByDate: Record<string, Event[]>;
   onDayClick?: (date: string, events: Event[]) => void;
   onEventClick?: (event: Event) => void;
-  onTodayClick?: () => void;
+  onTodayClick?: (date: string, events: Event[]) => void;
   className?: string;
 }
 
@@ -268,6 +452,20 @@ export const MonthCalendar: React.FC<MonthCalendarProps> = ({
   const monthName = format(new Date(year, month - 1, 1), 'MMMM yyyy');
   const currentDate = new Date();
   const isCurrentMonth = currentDate.getFullYear() === year && currentDate.getMonth() + 1 === month;
+  
+  // Get today's date key and events
+  // Always use the actual current date for "today"
+  const currentYear = currentDate.getFullYear();
+  const currentMonthNum = currentDate.getMonth() + 1;
+  const currentDay = currentDate.getDate();
+  
+  // Build today's date key using the actual current date
+  // For CurrentMonthPage, year === currentYear, so eventsByDate will have events for currentYear
+  // For other pages viewing a different year, we still use current date but may not find events
+  const todayDateKey = buildDateKey(currentYear, currentMonthNum, currentDay);
+  // Look up events in eventsByDate - if viewing current year, this will work
+  // If viewing a different year, we need to check if year matches currentYear
+  const todayEvents = (year === currentYear) ? (eventsByDate[todayDateKey] || []) : [];
 
   return (
     <div className={className}>
@@ -280,7 +478,7 @@ export const MonthCalendar: React.FC<MonthCalendarProps> = ({
         </h2>
         <div className="flex space-x-2">
           <button 
-            onClick={onTodayClick}
+            onClick={() => onTodayClick?.(todayDateKey, todayEvents)}
             disabled={!onTodayClick}
             className={cn(
               "flex items-center justify-center rounded-lg px-3 py-1.5 text-sm font-medium transition-colors",

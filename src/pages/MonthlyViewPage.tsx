@@ -3,6 +3,7 @@ import { getCalendarItemsForYear, months } from "../data";
 import { groupEventsByDate } from "../utils/dateUtils";
 import { MonthCalendar } from "../components/calendar/MonthCalendar";
 import { EventDetailsModal } from "../components/events/EventDetailsModal";
+import { NoEventsModal } from "../components/events/NoEventsModal";
 import type { Event } from "../utils/types";
 
 interface MonthlyViewPageProps {
@@ -38,6 +39,7 @@ export const MonthlyViewPage: React.FC<MonthlyViewPageProps> = ({
 
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [selectedEvents, setSelectedEvents] = useState<Event[]>([]);
+  const [showNoEvents, setShowNoEvents] = useState(false);
 
   if (!monthMeta) return null;
 
@@ -55,11 +57,68 @@ export const MonthlyViewPage: React.FC<MonthlyViewPageProps> = ({
     if (!events.length) return;
     setSelectedDate(date);
     setSelectedEvents(events);
+    setShowNoEvents(false);
   };
 
   const handleEventClick = (event: Event) => {
     setSelectedDate(event.date);
     setSelectedEvents([event]);
+    setShowNoEvents(false);
+  };
+
+  const handleTodayClick = (todayDateKey: string, todayEvents: Event[]) => {
+    const today = new Date();
+    const todayYear = today.getFullYear();
+    const todayMonth = today.getMonth() + 1; // 1-12
+    
+    // If viewing a different year than current year, get events for current year
+    const currentYearItems = year !== todayYear 
+      ? getCalendarItemsForYear(todayYear)
+      : allItems;
+    
+    // If we're not on the current month, navigate to it first
+    if (todayMonth !== monthId) {
+      onMonthChange(todayMonth);
+      // Get events from current year's items (not calendar year if different)
+      const todayEventsFromAll = currentYearItems.filter((item: Event) => item.date === todayDateKey);
+      
+      if (todayEventsFromAll.length > 0) {
+        setSelectedDate(todayDateKey);
+        setSelectedEvents(todayEventsFromAll);
+        setShowNoEvents(false);
+      } else {
+        setSelectedDate(todayDateKey);
+        setSelectedEvents([]);
+        setShowNoEvents(true);
+      }
+    } else {
+      // We're already on the current month
+      // If viewing current year, use events from MonthCalendar
+      // If viewing different year, get events from current year's data
+      if (year === todayYear) {
+        if (todayEvents.length > 0) {
+          setSelectedDate(todayDateKey);
+          setSelectedEvents(todayEvents);
+          setShowNoEvents(false);
+        } else {
+          setSelectedDate(todayDateKey);
+          setSelectedEvents([]);
+          setShowNoEvents(true);
+        }
+      } else {
+        // Viewing different year, get events from current year
+        const todayEventsFromCurrentYear = currentYearItems.filter((item: Event) => item.date === todayDateKey);
+        if (todayEventsFromCurrentYear.length > 0) {
+          setSelectedDate(todayDateKey);
+          setSelectedEvents(todayEventsFromCurrentYear);
+          setShowNoEvents(false);
+        } else {
+          setSelectedDate(todayDateKey);
+          setSelectedEvents([]);
+          setShowNoEvents(true);
+        }
+      }
+    }
   };
 
   return (
@@ -105,6 +164,7 @@ export const MonthlyViewPage: React.FC<MonthlyViewPageProps> = ({
         eventsByDate={eventsByDate}
         onDayClick={handleDayClick}
         onEventClick={handleEventClick}
+        onTodayClick={handleTodayClick}
       />
 
       {selectedDate && selectedEvents.length > 0 && (
@@ -114,6 +174,17 @@ export const MonthlyViewPage: React.FC<MonthlyViewPageProps> = ({
           onClose={() => {
             setSelectedDate(null);
             setSelectedEvents([]);
+            setShowNoEvents(false);
+          }}
+        />
+      )}
+
+      {selectedDate && showNoEvents && (
+        <NoEventsModal
+          date={selectedDate}
+          onClose={() => {
+            setSelectedDate(null);
+            setShowNoEvents(false);
           }}
         />
       )}

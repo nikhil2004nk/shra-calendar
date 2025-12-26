@@ -4,6 +4,7 @@ import { groupEventsByDate } from "../utils/dateUtils";
 import type { Event } from "../utils/types";
 import { MonthCalendar } from "../components/calendar/MonthCalendar";
 import { EventDetailsModal } from "../components/events/EventDetailsModal";
+import { NoEventsModal } from "../components/events/NoEventsModal";
 
 interface CurrentMonthPageProps {
   year: number;    // real current year
@@ -32,6 +33,7 @@ export const CurrentMonthPage: React.FC<CurrentMonthPageProps> = ({
 
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [selectedEvents, setSelectedEvents] = useState<Event[]>([]);
+  const [showNoEvents, setShowNoEvents] = useState(false);
 
   if (!monthMeta) return null;
 
@@ -39,28 +41,27 @@ export const CurrentMonthPage: React.FC<CurrentMonthPageProps> = ({
     if (!events.length) return;
     setSelectedDate(date);
     setSelectedEvents(events);
+    setShowNoEvents(false);
   };
 
   const handleEventClick = (event: Event) => {
     setSelectedDate(event.date);
     setSelectedEvents([event]);
+    setShowNoEvents(false);
   };
 
-  const handleTodayClick = () => {
-    const today = new Date();
-    const todayYear = today.getFullYear();
-    const todayMonth = today.getMonth() + 1; // 1-12
-    
-    // If we're not already on the current month, navigate to it
-    if (todayYear !== year || todayMonth !== monthId) {
-      // In a real app, you would update the URL or trigger a navigation
-      // For now, we'll just log it since this is a simplified example
-      console.log(`Navigating to current month: ${todayMonth}/${todayYear}`);
-      // In a real implementation, you would update the route or state here
+  const handleTodayClick = (date: string, events: Event[]) => {
+    if (events.length > 0) {
+      // If there are events, open the modal
+      setSelectedDate(date);
+      setSelectedEvents(events);
+      setShowNoEvents(false);
+    } else {
+      // If no events, show "no events" message
+      setSelectedDate(date);
+      setSelectedEvents([]);
+      setShowNoEvents(true);
     }
-    
-    // Close any open modals when going to today
-    setSelectedDate(null);
   };
 
 
@@ -101,6 +102,17 @@ export const CurrentMonthPage: React.FC<CurrentMonthPageProps> = ({
           onClose={() => {
             setSelectedDate(null);
             setSelectedEvents([]);
+            setShowNoEvents(false);
+          }}
+        />
+      )}
+
+      {selectedDate && showNoEvents && (
+        <NoEventsModal
+          date={selectedDate}
+          onClose={() => {
+            setSelectedDate(null);
+            setShowNoEvents(false);
           }}
         />
       )}

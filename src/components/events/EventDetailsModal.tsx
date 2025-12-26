@@ -60,6 +60,75 @@ export const EventDetailsModal: React.FC<EventDetailsModalProps> = ({
     }
   };
 
+  const getTypeBadge = (type: string) => {
+    switch (type) {
+      case 'movie':
+        return {
+          label: 'Movie',
+          bg: 'bg-purple-100',
+          text: 'text-purple-800',
+          border: 'border-purple-200'
+        };
+      case 'function':
+        return {
+          label: 'Function',
+          bg: 'bg-emerald-100',
+          text: 'text-emerald-800',
+          border: 'border-emerald-200'
+        };
+      case 'movie-anniversary':
+        return {
+          label: 'Anniversary',
+          bg: 'bg-amber-100',
+          text: 'text-amber-800',
+          border: 'border-amber-200'
+        };
+      case 'film-event':
+        return {
+          label: 'Film',
+          bg: 'bg-red-100',
+          text: 'text-red-800',
+          border: 'border-red-200'
+        };
+      case 'fashion-event':
+        return {
+          label: 'Fashion',
+          bg: 'bg-pink-100',
+          text: 'text-pink-800',
+          border: 'border-pink-200'
+        };
+      case 'cultural-event':
+        return {
+          label: 'Cultural',
+          bg: 'bg-indigo-100',
+          text: 'text-indigo-800',
+          border: 'border-indigo-200'
+        };
+      case 'social-event':
+        return {
+          label: 'Social',
+          bg: 'bg-teal-100',
+          text: 'text-teal-800',
+          border: 'border-teal-200'
+        };
+      case 'award-event':
+        return {
+          label: 'Award',
+          bg: 'bg-yellow-100',
+          text: 'text-yellow-800',
+          border: 'border-yellow-200'
+        };
+      case 'event':
+      default:
+        return {
+          label: 'Event',
+          bg: 'bg-blue-100',
+          text: 'text-blue-800',
+          border: 'border-blue-200'
+        };
+    }
+  };
+
   return (
     <div 
       className="fixed inset-0 z-50 flex items-start sm:items-center justify-center p-2 sm:p-4 bg-black/60 overflow-y-auto"
@@ -105,35 +174,22 @@ export const EventDetailsModal: React.FC<EventDetailsModalProps> = ({
             <div key={event.id} className="p-6">
               {movie ? (
                 <ShraddhaMovieDetails movie={movie} />
-              ) : event.type === 'function' ? (
+              ) : (
                 <div className="bg-white rounded-lg shadow p-6">
                   <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-4">
-  <h3 className="text-lg sm:text-xl font-semibold text-gray-900 leading-snug">
-    {event.title}
-  </h3>
+                    <h3 className="text-lg sm:text-xl font-semibold text-gray-900 leading-snug flex-1 min-w-0">
+                      {event.title}
+                    </h3>
 
-  {event.meta?.anniversaryYears && (
-    <span
-      className="
-        self-start sm:self-auto
-        shrink-0
-        px-2.5 sm:px-3
-        py-1
-        bg-yellow-100
-        text-yellow-800
-        text-xs sm:text-sm
-        font-semibold
-        rounded-full
-        border border-yellow-200
-        shadow-sm
-        whitespace-nowrap
-      "
-    >
-      {event.meta.anniversaryYears} year
-      {event.meta.anniversaryYears > 1 ? 's' : ''} ago
-    </span>
-  )}
-</div>
+                    {(() => {
+                      const typeBadge = getTypeBadge(event.type);
+                      return (
+                        <span className={`inline-flex items-center shrink-0 w-fit px-2.5 sm:px-3 py-1 ${typeBadge.bg} ${typeBadge.text} text-xs sm:text-sm font-semibold rounded-full border ${typeBadge.border} shadow-sm whitespace-nowrap`}>
+                          {typeBadge.label}
+                        </span>
+                      );
+                    })()}
+                  </div>
 
                   <div className="space-y-4">
                     {event.description && (
@@ -160,51 +216,11 @@ export const EventDetailsModal: React.FC<EventDetailsModalProps> = ({
                             {event.meta.anniversaryYears} Year{event.meta.anniversaryYears > 1 ? 's' : ''} Anniversary
                           </p>
                           <p className="text-xs text-yellow-600">
-                            Since {new Date(event.originalDate || event.date).getFullYear()}
+                            Since {new Date(event.originalDate || event.date).getFullYear() - (event.meta.anniversaryYears || 0)}
                           </p>
                         </div>
                       )}
                     </div>
-                  </div>
-                </div>
-              ) : (
-                <div className="bg-white rounded-lg shadow p-6">
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
-                    <h3 className="text-xl font-semibold text-gray-900">{event.title}</h3>
-                    {event.meta?.anniversaryYears && (
-                      <span className="whitespace-nowrap px-2 sm:px-3 py-1 bg-yellow-100 text-yellow-800 text-xs sm:text-sm font-semibold rounded-full border border-yellow-200 shadow-sm">
-                        {event.meta.anniversaryYears} year{event.meta.anniversaryYears > 1 ? 's' : ''} ago
-                      </span>
-                    )}
-                  </div>
-                  {event.description && (
-                    <p className="text-gray-700 mb-4">{event.description}</p>
-                  )}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 text-sm">
-                    <div className="p-2 sm:p-0">
-                      <p className="text-gray-500">Event Date</p>
-                      <p className="font-medium text-gray-800">
-                        {formatDisplayDate(event.originalDate || event.date)}
-                      </p>
-                    </div>
-                    {event.meta?.place && (
-                      <div className="p-2 sm:p-0">
-                        <p className="text-gray-500">Location</p>
-                        <p className="font-medium text-gray-800">
-                          {event.meta.place}
-                        </p>
-                      </div>
-                    )}
-                    {event.meta?.anniversaryYears && (
-                      <div className="bg-yellow-50 p-2 sm:p-3 rounded-lg border-l-4 border-yellow-400 sm:col-span-2 lg:col-span-1">
-                        <p className="text-yellow-700 font-medium text-sm sm:text-base">
-                          {event.meta.anniversaryYears} Year{event.meta.anniversaryYears > 1 ? 's' : ''} Anniversary
-                        </p>
-                        <p className="text-xs text-yellow-600">
-                          Since {new Date(event.originalDate || event.date).getFullYear() - event.meta.anniversaryYears}
-                        </p>
-                      </div>
-                    )}
                   </div>
                 </div>
               )}
