@@ -6,6 +6,14 @@ import { CurrentMonthPage } from "./pages/CurrentMonthPage";
 import { MoviesPage } from "./pages/MoviesPage";
 import { months } from "./data";
 
+const Footer = () => (
+  <footer className="py-3 md:py-6 text-center text-xs sm:text-sm text-slate-400 bg-slate-950 border-t border-slate-800">
+    <p className="m-0 p-0">
+      Developed with 💖 by <span className="text-purple-300 font-semibold">Nikhil</span> & <span className="text-purple-300 font-semibold">Vaibhav</span>
+    </p>
+  </footer>
+);
+
 type View =
   | "landing"
   | "current-month"
@@ -29,16 +37,18 @@ function App() {
   const [calendarYear] = useState<number>(2026);
   const [view, setView] = useState<View>("landing");
   const [selectedMonth, setSelectedMonth] = useState<number>(currentMonth);
-  const [targetDate, setTargetDate] = useState<string | null>(null); // Date to open modal for
+  const [targetDate, setTargetDate] = useState<string | null>(null);
 
   const monthMeta = useMemo(
     () => months.find((m) => m.id === selectedMonth),
     [selectedMonth]
   );
-  void monthMeta; // avoid unused warning, used implicitly by pages
+  void monthMeta;
 
+  let pageContent;
+  
   if (view === "landing") {
-    return (
+    pageContent = (
       <LandingPage
         onGoCurrentMonth={() => setView("current-month")}
         onGoViewCalendar={() => setView("calendar-home")}
@@ -46,20 +56,16 @@ function App() {
         onGoMovies={() => setView("movies")}
       />
     );
-  }
-
-  if (view === "current-month") {
-    return (
+  } else if (view === "current-month") {
+    pageContent = (
       <CurrentMonthPage
         year={currentYear}
         monthId={currentMonth}
         onBack={() => setView("landing")}
       />
     );
-  }
-
-  if (view === "calendar-home") {
-    return (
+  } else if (view === "calendar-home") {
+    pageContent = (
       <CalendarHomePage
         year={calendarYear}
         onBack={() => setView("landing")}
@@ -70,10 +76,8 @@ function App() {
         }}
       />
     );
-  }
-
-  if (view === "calendar-home-month") {
-    return (
+  } else if (view === "calendar-home-month") {
+    pageContent = (
       <MonthlyViewPage
         year={calendarYear}
         monthId={selectedMonth}
@@ -88,16 +92,14 @@ function App() {
         }}
         onMonthChange={(newMonthId) => {
           setSelectedMonth(newMonthId);
-          setTargetDate(null); // Clear target date when month changes
+          setTargetDate(null);
         }}
         initialDate={targetDate}
-        onInitialDateHandled={() => setTargetDate(null)} // Clear target date after modal opens
+        onInitialDateHandled={() => setTargetDate(null)}
       />
     );
-  }
-
-  if (view === "monthly") {
-    return (
+  } else if (view === "monthly") {
+    pageContent = (
       <MonthlyViewPage
         year={calendarYear}
         monthId={selectedMonth}
@@ -107,13 +109,20 @@ function App() {
         onMonthChange={(newMonthId) => setSelectedMonth(newMonthId)}
       />
     );
+  } else if (view === "movies") {
+    pageContent = <MoviesPage onBack={() => setView("landing")} />;
+  } else {
+    return null;
   }
 
-  if (view === "movies") {
-    return <MoviesPage onBack={() => setView("landing")} />;
-  }
-
-  return null;
+  return (
+    <div className="min-h-screen flex flex-col bg-slate-950 text-slate-50">
+      <div className="flex-1">
+        {pageContent}
+      </div>
+      <Footer />
+    </div>
+  );
 }
 
 export default App;

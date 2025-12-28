@@ -1,4 +1,5 @@
 import React from "react";
+
 interface LandingPageProps {
   onGoCurrentMonth: () => void;
   onGoViewCalendar: () => void;

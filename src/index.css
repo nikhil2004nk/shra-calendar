@@ -26,3 +26,30 @@
   scrollbar-width: thin;
   scrollbar-color: rgba(100, 116, 139, 0.5) rgba(15, 23, 42, 0.5);
 }
+
+/* Custom scrollbar styles */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #7e22ce #1e1b4b;
+}
+
+/* Chrome, Edge, and Safari */
+*::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+*::-webkit-scrollbar-track {
+  background: rgba(30, 27, 75, 0.3); /* Dark purple background */
+  border-radius: 3px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: #7e22ce; /* Purple-600 */
+  border-radius: 3px;
+  border: 1px solid #9333ea; /* Slightly lighter purple for the border */
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background-color: #9333ea; /* Lighter purple on hover */
+}
