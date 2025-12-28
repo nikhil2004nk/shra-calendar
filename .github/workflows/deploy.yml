@@ -2,14 +2,13 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: [main]  # Changed from nik-branch to main
+    branches: [main]
   workflow_dispatch:
 
 permissions:
   contents: read
   pages: write
   id-token: write
-  pull-requests: write
 
 concurrency:
   group: 'pages'
@@ -39,7 +38,7 @@ jobs:
           npm run build
         env:
           NODE_ENV: production
-          VITE_BASE_URL: /shra-calendar/  # Make sure this matches your repository name
+          VITE_BASE_URL: /${{ github.event.repository.name }}/  # This will automatically use your repository name
 
       - name: Ensure .nojekyll file exists
         run: |
@@ -73,6 +72,14 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     steps:
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+        
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: 'dist'
+          
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
