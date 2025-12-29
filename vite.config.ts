@@ -28,7 +28,7 @@ export default defineConfig(() => {
       sourcemap: !isProduction, // Disable sourcemaps in production for better performance
       emptyOutDir: true,
       manifest: true,
-      minify: 'esbuild',
+      minify: 'esbuild' as const,
       rollupOptions: {
         output: {
           assetFileNames: 'assets/[name]-[hash][extname]',
