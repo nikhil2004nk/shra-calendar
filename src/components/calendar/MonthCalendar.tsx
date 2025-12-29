@@ -87,20 +87,12 @@ interface MonthlySummaryProps {
 
 const MonthlySummary: React.FC<MonthlySummaryProps> = ({ eventsByDate, onEventClick }) => {
   const currentDate = new Date();
-  const allEvents = Object.values(eventsByDate).flat();
+  const allEvents = useMemo(() => Object.values(eventsByDate).flat(), [eventsByDate]);
   const totalEvents = allEvents.length;
   const [selectedFilter, setSelectedFilter] = useState<string | null>(null);
 
-  if (totalEvents === 0) {
-    return (
-      <div className="mt-6 rounded-lg bg-slate-800/50 p-4 text-center text-slate-400">
-        No events scheduled for this month.
-      </div>
-    );
-  }
-
-  // Get month and year from the first event
-  const firstEventDate = allEvents[0].date;
+  // Get month and year from the first event (or current date if no events)
+  const firstEventDate = allEvents.length > 0 ? allEvents[0].date : new Date().toISOString().split('T')[0];
   const date = new Date(firstEventDate);
   const monthName = date.toLocaleString('default', { month: 'long' });
   const yearNum = date.getFullYear();
@@ -163,6 +155,7 @@ const MonthlySummary: React.FC<MonthlySummaryProps> = ({ eventsByDate, onEventCl
     const weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
     weekdays.forEach(day => eventsByWeekday[day] = 0);
     
+    const eventCount = allEvents.length;
     allEvents.forEach(event => {
       // Merge "event" and "international-event" into a single "Event" category
       const displayType = event.type === 'international-event' ? 'event' : event.type;
@@ -172,16 +165,24 @@ const MonthlySummary: React.FC<MonthlySummaryProps> = ({ eventsByDate, onEventCl
     });
 
     return {
-      totalEvents,
+      totalEvents: eventCount,
       eventsByType,
       eventsByWeekday,
       weekdays: weekdays.map(day => ({
         day,
         count: eventsByWeekday[day],
-        percentage: Math.round((eventsByWeekday[day] / totalEvents) * 100) || 0
+        percentage: Math.round((eventsByWeekday[day] / eventCount) * 100) || 0
       }))
     };
-  }, [allEvents, totalEvents]);
+  }, [allEvents]);
+
+  if (totalEvents === 0) {
+    return (
+      <div className="mt-6 rounded-lg bg-slate-800/50 p-4 text-center text-slate-400">
+        No events scheduled for this month.
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">

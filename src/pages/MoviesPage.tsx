@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback, useMemo } from "react";
 import { movies } from "../data/movies";
 import { format, parseISO } from "date-fns";
 import { Dialog } from "@headlessui/react";
@@ -44,7 +44,7 @@ export const MoviesPage: React.FC<MoviesPageProps> = ({ onBack }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedYear, setSelectedYear] = useState<number | 'all'>('all');
   const [releaseFilter, setReleaseFilter] = useState<'all' | 'released' | 'upcoming'>('all');
-  const currentDate = new Date();
+  const currentDate = useMemo(() => new Date(), []);
 
   // Click outside handler removed as it's now handled by the MovieFilterDropdown component
   
@@ -61,7 +61,7 @@ export const MoviesPage: React.FC<MoviesPageProps> = ({ onBack }) => {
         year: date.getFullYear(),
         month: format(date, 'MMMM').toLowerCase()
       };
-    } catch (error) {
+    } catch {
       // Fallback to current date if parsing fails
       const fallbackDate = new Date();
       return {
@@ -95,7 +95,7 @@ export const MoviesPage: React.FC<MoviesPageProps> = ({ onBack }) => {
 
 
   // Filter movies based on search query and filters
-  const filterMovies = (movieList: ProcessedMovie[]) => {
+  const filterMovies = useCallback((movieList: ProcessedMovie[]) => {
     let filtered = [...movieList];
     
     // Apply search query filter
@@ -124,25 +124,24 @@ export const MoviesPage: React.FC<MoviesPageProps> = ({ onBack }) => {
     }
     
     // Apply release status filter
-  // Update the filterMovies function's release status filter section:
-if (releaseFilter === 'released') {
-  filtered = filtered.filter(movie => 
-    movie._date <= currentDate && 
-    movie.date && 
-    movie.date.toUpperCase() !== 'TBA' &&
-    movie.type !== 'upcoming'
-  );
-} else if (releaseFilter === 'upcoming') {
-  filtered = filtered.filter(movie => 
-    movie._date > currentDate || 
-    !movie.date || 
-    movie.date.toUpperCase() === 'TBA' || 
-    movie.type === 'upcoming'
-  );
-}
+    if (releaseFilter === 'released') {
+      filtered = filtered.filter(movie => 
+        movie._date <= currentDate && 
+        movie.date && 
+        movie.date.toUpperCase() !== 'TBA' &&
+        movie.type !== 'upcoming'
+      );
+    } else if (releaseFilter === 'upcoming') {
+      filtered = filtered.filter(movie => 
+        movie._date > currentDate || 
+        !movie.date || 
+        movie.date.toUpperCase() === 'TBA' || 
+        movie.type === 'upcoming'
+      );
+    }
     
     return filtered;
-  };
+  }, [searchQuery, selectedYear, releaseFilter, currentDate]);
 
   // Get unique years for filter dropdown based on current filtered movies
   const availableYears = React.useMemo(() => {
@@ -160,7 +159,7 @@ if (releaseFilter === 'released') {
     });
     
     return Array.from(years).sort((a, b) => b - a);
-  }, [processedMovies, searchQuery, selectedYear, releaseFilter]);
+  }, [processedMovies, searchQuery, selectedYear, releaseFilter, filterMovies]);
   
   // Group movies by year
   const moviesByYear = React.useMemo(() => {
@@ -206,7 +205,7 @@ if (releaseFilter === 'released') {
         // Sort by date for dated movies
         return (a._date as Date).getTime() - (b._date as Date).getTime();
       });
-  }, [processedMovies, currentDate]);
+  }, [processedMovies, currentDate, filterMovies]);
   
   const handleMovieClick = (movie: Movie) => {
     setSelectedMovie(movie);

@@ -22,8 +22,6 @@ export const EventDetailsModal: React.FC<EventDetailsModalProps> = ({
   events,
   onClose
 }) => {
-  if (!events.length) return null;
-
   // Pre-resolve movie metadata for events that have baseMovieId
   const eventsWithMovie = useMemo<EventWithMovie[]>(
     () =>
@@ -34,6 +32,8 @@ export const EventDetailsModal: React.FC<EventDetailsModalProps> = ({
       }),
     [events]
   );
+
+  if (!events.length) return null;
 
   const formatDisplayDate = (dateStr: string) => {
     const date = new Date(dateStr);

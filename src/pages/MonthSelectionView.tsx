@@ -28,13 +28,31 @@ export const MonthSelectionView: React.FC = () => {
     setCurrentYear(prev => prev - 1);
   };
 
-  if (view === 'calendar' && selectedMonth !== null) {
-    const monthDate = new Date(currentYear, selectedMonth, 1);
-    const monthEvents = useMemo(() => 
-      getEventsByMonth(currentYear, selectedMonth), 
-      [currentYear, selectedMonth]
+  // Get events count for each month
+  const monthEventsCount = useMemo(() => {
+    const counts = new Array(12).fill(0);
+    const currentYearEvents = allEvents.filter(event => 
+      new Date(event.date).getFullYear() === currentYear
     );
     
+    currentYearEvents.forEach(event => {
+      const month = new Date(event.date).getMonth();
+      counts[month]++;
+    });
+    
+    return counts;
+  }, [currentYear]);
+
+  // Calculate month events when calendar view is active
+  const monthDate = view === 'calendar' && selectedMonth !== null 
+    ? new Date(currentYear, selectedMonth, 1) 
+    : null;
+  const monthEvents = useMemo(() => {
+    if (selectedMonth === null) return [];
+    return getEventsByMonth(currentYear, selectedMonth);
+  }, [currentYear, selectedMonth]);
+
+  if (view === 'calendar' && selectedMonth !== null && monthDate) {
     const monthName = format(monthDate, 'MMMM yyyy');
 
     return (
@@ -93,21 +111,6 @@ export const MonthSelectionView: React.FC = () => {
       </div>
     );
   }
-
-  // Get events count for each month
-  const monthEventsCount = useMemo(() => {
-    const counts = new Array(12).fill(0);
-    const currentYearEvents = allEvents.filter(event => 
-      new Date(event.date).getFullYear() === currentYear
-    );
-    
-    currentYearEvents.forEach(event => {
-      const month = new Date(event.date).getMonth();
-      counts[month]++;
-    });
-    
-    return counts;
-  }, [currentYear]);
 
   return (
     <div className="container mx-auto px-4 py-8">

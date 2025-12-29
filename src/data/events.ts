@@ -2,7 +2,7 @@ import rawEvents from "./events/events-2026.json";
 import rawFunctions from "./functions/functions-2026.json";
 import type { CalendarItem } from "../utils/types";
 
-const withDateParts = (item: any): CalendarItem => {
+const withDateParts = (item: Record<string, unknown> & { date: string }): CalendarItem => {
   const [, month] = item.date.split("-").map(Number);
   return {
     ...item,

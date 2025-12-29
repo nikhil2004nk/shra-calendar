@@ -47,7 +47,10 @@ export const MonthlyViewPage: React.FC<MonthlyViewPageProps> = ({
 
   // Auto-open modal for initialDate when component mounts or initialDate changes
   useEffect(() => {
-    if (initialDate) {
+    if (!initialDate) return;
+
+    // Use a timeout to avoid synchronous state updates in effect
+    const timeoutId = setTimeout(() => {
       // Check if we have events for this date in the current month
       if (eventsByDate[initialDate]) {
         const eventsForDate = eventsByDate[initialDate];
@@ -77,7 +80,9 @@ export const MonthlyViewPage: React.FC<MonthlyViewPageProps> = ({
       if (onInitialDateHandled) {
         onInitialDateHandled();
       }
-    }
+    }, 0);
+
+    return () => clearTimeout(timeoutId);
   }, [initialDate, eventsByDate, allItems, onInitialDateHandled]);
 
   if (!monthMeta) return null;
